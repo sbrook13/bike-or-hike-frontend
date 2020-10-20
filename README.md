@@ -1,68 +1,73 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Gift Giver
 
-## Available Scripts
+An app to ...
 
-In the project directory, you can run:
+# Table Of Contents 
+- [Description](https://github.com/sbrook13/Gift-Giver-Frontend#description)
+- [How It Works (gifs)](https://github.com/sbrook13/Gift-Giver-Frontend#how-it-works)
+- [Example Code](https://github.com/sbrook13/Gift-Giver-Frontend#example-code)
+- [Technology Used](https://github.com/sbrook13/Gift-Giver-Frontend#technology-used)
+- [Setting up for the Application](https://github.com/sbrook13/Gift-Giver-Frontend#setting-up-for-the-application)
+- [Main Features](https://github.com/sbrook13/Gift-Giver-Frontend#main-features)
+- [Features in Progress](https://github.com/sbrook13/Gift-Giver-Frontend#features-in-progress)
+- [Contact Information](https://github.com/sbrook13/Gift-Giver-Frontend#contact-information)
+- [Link to Backend Repo](https://github.com/sbrook13/Gift-Giver-Frontend#link-to-backend-repo)
 
-### `yarn start`
+## Description
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Description text 
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## How It Works
 
-### `yarn test`
+### Gif Example 1
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Create User](https://media.giphy.com/media/5lLpKmJnUIz8jcpRjp/giphy.gif)
 
-### `yarn build`
+## Example Code 
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+  test
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## Technology Used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- React
+- Javascript
+- HTML
+- Bootstrap
+- CSS
 
-### `yarn eject`
+## Setting up for the application
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+First install the following
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+  npm i --save @fortawesome/fontawesome-svg-core
+  npm install --save @fortawesome/free-solid-svg-icons
+  npm install --save @fortawesome/react-fontawesome
+  npm install --save @fortawesome/free-brands-svg-icons
+  npm install --save @fortawesome/free-regular-svg-icons
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+To start the server run
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+``` 
+    npm start 
+```
 
-## Learn More
+## Main Features
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- User can sign up/sign in with authentication.
+- Example
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Features in Progress
 
-### Code Splitting
+- Example 
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Contact Information
 
-### Analyzing the Bundle Size
+Created by [Shelley Brook](https://www.linkedin.com/in/sbrook13/)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## Link to Backend Repo
 
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+https://github.com/sbrook13/
