@@ -5,7 +5,7 @@ export default function BikeTrailsPage(props) {
   const displayTrails = () => {
     return props.allTrails.map(trail => {
       return (
-        <div className="trail-card">
+        <div className="main-page trail-card">
           <p>{trail.name}</p>
           {console.log({trail})}
           {calculateTime({trail})}
