@@ -5,7 +5,7 @@ export default function HikeTrailsPage(props) {
   const displayTrails = () => {
     return props.allTrails.map(trail => {
       return (
-        <div className="trail-card">
+        <div className="main-page trail-card">
           <p
             style={{
               "font-size": "8",
@@ -13,7 +13,7 @@ export default function HikeTrailsPage(props) {
             }
           >{trail.name}</p>
           {console.log({trail})}
-          {/* {calculateTime({trail})} */}
+          {calculateTime({trail})}
         </div>
       )
     })
@@ -21,7 +21,7 @@ export default function HikeTrailsPage(props) {
 
   const calculateTime = (trail) => {
     console.log(trail)
-    const timeInHours = ( trail.length / 5 ) + (trail.ascent / 2000)
+    const timeInHours = ( trail["length"] / 5 ) + (trail.ascent / 2000)
     return timeInHours
   }
 
