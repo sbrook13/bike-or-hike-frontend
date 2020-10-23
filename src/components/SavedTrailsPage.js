@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Switch} from 'react-router-dom';
 import TrailCard from './TrailCard';
 import TrailSpecs from './TrailSpecs';
 import {bikeBaseURL, hikeBaseURL, parseJSON} from './hooks/customHooks';
@@ -8,6 +9,7 @@ export default function SavedTrailsPage(props) {
   const [fullTrailInfo, getFullTrailInfo] = useState([])
 
   const { 
+    title, 
     user, 
     saveToList, 
     addToFavorites,
@@ -31,18 +33,15 @@ export default function SavedTrailsPage(props) {
     return idString
   }
 
-  const getTrailData = () => {
-    useEffect(() => {
-      function fetchData(){
-        const idString = saveIds()
-        fetch(`${ridesByIdURL}?ids=${idString}&${apiKey}`)
-          .then(parseJSON)
-          .then(result => getFullTrailInfo(result.trails))
-      }  
-      fetchData()
-      showTrails()
-    }, [])
-  }
+  useEffect(() => {
+    function fetchData(){
+      const idString = saveIds()
+      fetch(`${ridesByIdURL}?ids=${idString}&${apiKey}`)
+        .then(parseJSON)
+        .then(result => getFullTrailInfo(result.trails))
+    }  
+    fetchData()
+  }, [])
 
   const displayTrailCards = () => {
     return fullTrailInfo.map(trail => {
@@ -65,14 +64,11 @@ export default function SavedTrailsPage(props) {
     />
   }
 
-  const showTrails = () => {
-    selectedTrail ? displayTrailSpecs() : displayTrailCards()
-  }
-
   return (
     <div className="main-page">
-      <h1>Bucket List</h1>
-      { savedTrails[0] ? getTrailData() : <p>You have no trips saved here.</p> }
+      <h1>{title}</h1>
+      { savedTrails[0] ? null : <p>You have no trips saved here.</p> }
+      { selectedTrail ? displayTrailSpecs() : displayTrailCards() }
     </div>
   )
 }

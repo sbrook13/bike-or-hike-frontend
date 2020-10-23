@@ -17,11 +17,15 @@ import { faBicycle,
 
 
 function SideBar(props) {
-  const { user, showAllTrails } = props
+  const { user, showAllTrails, logoutUser } = props
 
   const handleXHover = () => {
     const logoutText = document.querySelector('#logout-text')
     logoutText.classList.toggle('hidden')
+  }
+
+  const handleLogoutClick = () => {
+    logoutUser(user)
   }
 
   const pageLinks = [
@@ -63,6 +67,7 @@ function SideBar(props) {
           size="2x" 
           onMouseEnter={handleXHover} 
           onMouseLeave={handleXHover} 
+          onClick={handleLogoutClick}
         />
     </div>
   );

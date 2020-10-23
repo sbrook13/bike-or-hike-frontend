@@ -77,6 +77,13 @@ function App() {
     setLogin(true)
   }
 
+  const logoutUser = (user) => {
+    setUser(null)
+    setLogin(false)
+    localStorage.clear()
+    window.location.href = '/'
+  }
+
   const loadCompleted = (completed) => {
     setCompletedTrails(completed)
   }
@@ -116,7 +123,7 @@ function App() {
 
   return (
     <div className="App">
-      <SideBar user={user} showAllTrails={showAllTrails} />
+      <SideBar user={user} showAllTrails={showAllTrails} logoutUser={logoutUser}/>
       <main className="main-section">
         <Switch>
           <Route path="/login" render={ (routeProps) => <LoginPage 
@@ -159,7 +166,7 @@ function App() {
           />
           <Route path="/camp" render={ () => <SavedTrailsPage user={user} /> } />
           <Route path="/completed" render={ () => <SavedTrailsPage 
-            title={"completed"}
+            title={"Your Past Adventures"}
             user={user} 
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
@@ -172,7 +179,7 @@ function App() {
             /> }
           />
           <Route path="/bucket-list" render={ () => <SavedTrailsPage 
-            title={"bucket-list"}
+            title={"Why Not Today?"}
             user={user} 
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
@@ -185,7 +192,7 @@ function App() {
             /> }
           />
           <Route path="/favorites" render={ () => <SavedTrailsPage 
-            title={"favorites"}
+            title={"The Best of the Best"}
             user={user} 
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
