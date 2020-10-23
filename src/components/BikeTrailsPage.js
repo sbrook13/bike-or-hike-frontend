@@ -1,28 +1,36 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import TrailCard from './TrailCard'
 
 export default function BikeTrailsPage(props) {
 
-  const displayTrails = () => {
+  const {
+    allTrails, 
+    filteredBikeTrails, 
+    filterTrails, 
+    setTrailSelection, 
+    selectedTrail, 
+    seeAllTrails, 
+    addToCompleted, 
+    addToList, 
+    addToFavorites
+  } = props
+  
+  const displayTrailCards = () => {
     return props.allTrails.map(trail => {
-      return (
-        <div className="main-page trail-card">
-          <p>{trail.name}</p>
-          {console.log({trail})}
-          {calculateTime({trail})}
-        </div>
-      )
+      console.log(trail)
+      return <TrailCard trail={trail}/>
     })
   }
 
-  const calculateTime = (trail) => {
-    console.log(trail)
-    const timeInHours = ( trail.length / 5 ) + (trail.ascent / 2000)
-    return timeInHours
-  }
-
   return (
-    <div>
-      {displayTrails()}
+    <div className="flex-row-container">
+      <form>
+        <label>Seach Trails By Name:</label>
+        <input type="text" onChange={props.filterTrails}/>
+      </form>
+      <div className="trails-section">
+        {displayTrailCards()}
+      </div>
     </div>
   )
 }

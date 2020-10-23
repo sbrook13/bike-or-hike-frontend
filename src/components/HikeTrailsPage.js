@@ -1,33 +1,54 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import TrailCard from './TrailCard'
+import TrailSpecs from './TrailSpecs'
 
 export default function HikeTrailsPage(props) {
 
-  const displayTrails = () => {
-    return props.allTrails.map(trail => {
-      return (
-        <div className="main-page trail-card">
-          <p
-            style={{
-              "font-size": "8",
-              }
-            }
-          >{trail.name}</p>
-          {console.log({trail})}
-          {calculateTime({trail})}
-        </div>
-      )
+  const { 
+    allTrails, 
+    filteredBikeTrails, 
+    filterTrails, 
+    selectTrail, 
+    selectedTrail, 
+    seeAllTrails, 
+    addToCompleted, 
+    addToDoList, 
+    addToFavorites,
+    showAllTrails,
+    type
+  } = props
+
+  const displayAllTrails = () => {
+    return allTrails.map(trail => {
+      return <TrailCard trail={trail} selectTrail={props.selectTrail}/>
     })
   }
 
-  const calculateTime = (trail) => {
-    console.log(trail)
-    const timeInHours = ( trail["length"] / 5 ) + (trail.ascent / 2000)
-    return timeInHours
+  const displayTrailSpecs = () => {
+    const trail = selectedTrail
+    return <TrailSpecs 
+      trail={trail}
+      addToCompleted={addToCompleted} 
+      addToDoList={addToDoList} 
+      addToFavorites={addToFavorites}
+      showAllTrails={showAllTrails}
+      type={type}
+    />
+  }
+
+  const handleChange = (event) => {
+    console.log(event.target.input)
   }
 
   return (
-    <div>
-      {displayTrails()}
+    <div className="flex-row-container">
+      <form>
+        <label>Seach Trails By Name:</label>
+        <input type="text" onChange={event => handleChange(event)}/>
+      </form>
+      <div className="trails-section">
+        {selectedTrail ? displayTrailSpecs() : displayAllTrails()}
+      </div>
     </div>
   )
 }
