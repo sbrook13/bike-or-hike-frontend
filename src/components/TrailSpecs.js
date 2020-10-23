@@ -1,58 +1,83 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
+import { completedURL, favoritesURL, bucketlistURL } from './hooks/customHooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBicycle, 
   faShoePrints, 
-  faCampground, 
-  faChevronUp, 
   faTimes,
   faHeart, 
   faCheckSquare, 
+  faChevronLeft,
   faListAlt } 
   from '@fortawesome/free-solid-svg-icons';
 
 export default function TrailSpecs(props) {
 
-  const {trail, addToCompleted, addToDoList, addToFavorites, showAllTrails, type} = props
+  const {trail, saveToList, addToCompleted, addToBucketList, addToFavorites, showAllTrails, type, user } = props
  
   const calculateTime = () => {
-    console.log(trail)
     const timeInHours = ( trail['length'] / 5 ) + (trail.ascent / 2000)
     return timeInHours.toFixed(1)
   }
 
+  const handleSaveClick = (_, trail_id, trail_type, url, user, addToListFunction) => {
+    saveToList(_, trail_id, trail_type, url, user)
+    addToListFunction(trail_id, trail_type)
+    console.log(user)
+  }
+
+
   return (
     <div className="trail-specs">
-      <h2>{trail.name}</h2>
-      <header className="specs-icon-header">
-        <p onClick={(_) => addToCompleted(_, trail.id, type)}>        
-          <FontAwesomeIcon icon={faCheckSquare} 
-            size="1x" 
-            className="sidebar-icon" 
-            color="rgb(65, 65, 65)"
+      <header>
+        { type === 'bike' ? 
+          <FontAwesomeIcon icon={faBicycle} 
+          size="2x" 
+          className="sidebar-icon" 
+          color="rgb(65, 65, 65)"
+          /> :
+          <FontAwesomeIcon icon={faShoePrints} 
+          size="2x" 
+          className="sidebar-icon" 
+          color="rgb(65, 65, 65)"
           />
-        </p>
-        <p onClick={(_) => addToDoList(_, trail.id, type)}>        
-          <FontAwesomeIcon icon={faListAlt} 
-            size="1x" 
-            className="sidebar-icon" 
-            color="rgb(65, 65, 65)"
-          />
-        </p>
-        <p onClick={(_) => addToFavorites(_, trail.id, type)}>        
-          <FontAwesomeIcon icon={faHeart} 
-            size="1x" 
-            className="sidebar-icon" 
-            color="rgb(65, 65, 65)"
-          />
-        </p>
-        <p onClick={showAllTrails}>        
-          <FontAwesomeIcon icon={faTimes} 
-            size="1x" 
-            className="sidebar-icon" 
-            color="rgb(65, 65, 65)"
-          />
-        </p>
+        }
+        <h2>{trail.name}</h2>
       </header>
+      <section className="specs-icon-header">
+        { user ?
+          <>
+            <p onClick={(_) => handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted )}>        
+              <FontAwesomeIcon icon={faCheckSquare} 
+                size="1x" 
+                className="sidebar-icon" 
+                color="rgb(65, 65, 65)"
+              />
+            </p>
+            <p onClick={(_) => saveToList(_, trail.id, type, bucketlistURL, user, addToBucketList )}>        
+              <FontAwesomeIcon icon={faListAlt} 
+                size="1x" 
+                className="sidebar-icon" 
+                color="rgb(65, 65, 65)"
+              />
+            </p>
+            <p onClick={(_) => saveToList(_, trail.id, type, favoritesURL, user, addToFavorites )}>        
+              <FontAwesomeIcon icon={faHeart} 
+                size="1x" 
+                className="sidebar-icon" 
+                color="rgb(65, 65, 65)"
+              />
+            </p>
+          </> :
+          null 
+        }
+        <p onClick={showAllTrails}>        
+          <FontAwesomeIcon icon={faChevronLeft} 
+            size="1x" 
+            className="sidebar-icon" 
+            color="rgb(65, 65, 65)"
+          />
+        </p>
+      </section>
       <section className="specs">
         <p>Difficulty: {trail.difficulty}</p>
         <p>Length: {trail['length']}</p>
@@ -66,8 +91,8 @@ export default function TrailSpecs(props) {
       <section className="summary">
         <p>Condition: {trail.conditionStatus}</p>
         <p>{trail.summary}</p>
-        <a href={trail.url} target="_blank">
-          <button href={trail.url} target="_blank">More Details</button>
+        <a href={trail.url} target="_blank" rel="noopener noreferrer">
+          <button>More Details</button>
         </a>
       </section>
     </div>

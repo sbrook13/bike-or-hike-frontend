@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBicycle, 
   faShoePrints, 
   faCampground, 
-  faChevronUp, 
   faTimes,
   faHeart, 
   faCheckSquare, 
@@ -18,11 +17,7 @@ import { faBicycle,
 
 
 function SideBar(props) {
-  const { user } = props
-
-  const [allBikeTrails, setBikeTrails] = useState([])
-  const [allHikingTrails, setHikingTrails] = useState([])
-  const color = "rgb(65, 65, 65)"
+  const { user, showAllTrails } = props
 
   const handleXHover = () => {
     const logoutText = document.querySelector('#logout-text')
@@ -43,13 +38,14 @@ function SideBar(props) {
 
   const showSideIcons = (links) => {
     return links.map(link => {
-      return <Link to={link[1]}>
-        <FontAwesomeIcon icon={link[0]} 
-          size="1x" 
-          className="sidebar-icon" 
-          color="rgb(65, 65, 65)"
-        />
-      </Link>
+      return (
+        <Link to={link[1]} onClick={showAllTrails}>
+          <FontAwesomeIcon icon={link[0]} 
+            size="1x" 
+            className="sidebar-icon" 
+          />
+        </Link>
+      )
     })
   }
 
@@ -67,7 +63,6 @@ function SideBar(props) {
           size="2x" 
           onMouseEnter={handleXHover} 
           onMouseLeave={handleXHover} 
-          color={color}
         />
     </div>
   );
