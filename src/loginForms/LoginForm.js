@@ -38,7 +38,7 @@ export default function LoginForm(props) {
       <form method="POST" id="login-form" >
           <input type="text" name="username" placeholder="username"  required="required" onChange={(_) => handleChange(_, setUsername)} />
           <input type="password" name="password" placeholder="password"  required="required" onChange={(_) => handleChange(_, setPassword)}/>
-          <input type="button" id="login-button" value="Login" onClick={loginUser} />
+          <input className="btn" type="button" id="login-button" value="Login" onClick={loginUser} />
       </form>
     </div> 
   )

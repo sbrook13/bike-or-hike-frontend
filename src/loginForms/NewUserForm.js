@@ -41,14 +41,13 @@ export default function NewUserForm(props) {
   return (
     <div id="new-user-section">
       <h2>Create New User</h2>
+      <p> Include your address to find trails near you!</p>
       <form method="POST" id="create-user-form">
         <input type="text" name="name" placeholder="Your Name" required="required" onChange={(_) => handleChange(_, setName)} />
-        <input type="text" name="address" placeholder="Enter your address to find trails near you!" onChange={(_) => handleChange(_, setAddress)} />
-        <div>
-          <input type="text" name="username" placeholder="Create Username"  required="required" onChange={(_) => handleChange(_, setUsername)} />
-          <input type="password" name="password" placeholder="Enter password 6-15 characters"  required="required" onChange={(_) => handleChange(_, setPassword)} />
-        </div>
-        <input type="button" value="Create User" onClick={createUser}/>
+        <input type="text" name="address" placeholder="Your Address" onChange={(_) => handleChange(_, setAddress)} />
+        <input type="text" name="username" placeholder="Create Username"  required="required" onChange={(_) => handleChange(_, setUsername)} />
+        <input type="password" name="password" placeholder="Enter password 6-15 characters"  required="required" onChange={(_) => handleChange(_, setPassword)} />
+        <input type="button" className="btn" value="Create User" onClick={createUser}/>
       </form>
     </div>
   )

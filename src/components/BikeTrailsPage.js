@@ -19,6 +19,21 @@ export default function BikeTrailsPage(props) {
     user
   } = props
   
+
+  const trailPageWithSearch = () => {
+    return (
+      <>
+        <form>
+        <label>Seach Trails By Name:</label>
+        <input type="text" onChange={props.filterTrails}/>
+        </form>
+        <div className="trails-section">
+          {displayTrailCards()}
+        </div>
+      </>
+    )
+  }
+
   const displayTrailCards = () => {
     return allTrails.map(trail => {
       return <TrailCard trail={trail} selectTrail={selectTrail} />
@@ -41,13 +56,7 @@ export default function BikeTrailsPage(props) {
 
   return (
     <div className="flex-row-container">
-      <form>
-        <label>Seach Trails By Name:</label>
-        <input type="text" onChange={props.filterTrails}/>
-      </form>
-      <div className="trails-section">
-        {selectedTrail ? displayTrailSpecs() : displayTrailCards()}
-      </div>
+        {selectedTrail ? displayTrailSpecs() : trailPageWithSearch()}
     </div>
   )
 }
