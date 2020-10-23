@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react'
-import TrailSpecs from './TrailSpecs'
+import React from 'react'
 
 export default function TrailCard(props) {
  

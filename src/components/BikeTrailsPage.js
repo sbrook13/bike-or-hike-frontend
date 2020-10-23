@@ -1,25 +1,42 @@
-import React, {useState} from 'react'
+import React from 'react'
 import TrailCard from './TrailCard'
+import TrailSpecs from './TrailSpecs'
 
 export default function BikeTrailsPage(props) {
 
-  const {
+  const { 
+    saveToList,
+    addToFavorites,
+    addToCompleted,
+    addToBucketList,
     allTrails, 
-    filteredBikeTrails, 
+    filteredTrailList, 
     filterTrails, 
-    setTrailSelection, 
+    selectTrail, 
     selectedTrail, 
-    seeAllTrails, 
-    addToCompleted, 
-    addToList, 
-    addToFavorites
+    showAllTrails, 
+    type,
+    user
   } = props
   
   const displayTrailCards = () => {
-    return props.allTrails.map(trail => {
-      console.log(trail)
-      return <TrailCard trail={trail}/>
+    return allTrails.map(trail => {
+      return <TrailCard trail={trail} selectTrail={selectTrail} />
     })
+  }
+
+  const displayTrailSpecs = () => {
+    const trail = selectedTrail
+    return <TrailSpecs 
+      trail={trail}
+      saveToList={saveToList}
+      addToCompleted={addToCompleted} 
+      addToBucketList={addToBucketList} 
+      addToFavorites={addToFavorites}
+      showAllTrails={showAllTrails}
+      type={type}
+      user={user}
+    />
   }
 
   return (
@@ -29,7 +46,7 @@ export default function BikeTrailsPage(props) {
         <input type="text" onChange={props.filterTrails}/>
       </form>
       <div className="trails-section">
-        {displayTrailCards()}
+        {selectedTrail ? displayTrailSpecs() : displayTrailCards()}
       </div>
     </div>
   )

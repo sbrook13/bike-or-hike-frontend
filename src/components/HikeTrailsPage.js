@@ -1,26 +1,27 @@
-import React, {useState} from 'react'
+import React from 'react'
 import TrailCard from './TrailCard'
 import TrailSpecs from './TrailSpecs'
 
 export default function HikeTrailsPage(props) {
 
   const { 
+    saveToList,
+    addToFavorites,
+    addToCompleted,
+    addToBucketList,
     allTrails, 
-    filteredBikeTrails, 
+    filteredTrailList, 
     filterTrails, 
     selectTrail, 
     selectedTrail, 
-    seeAllTrails, 
-    addToCompleted, 
-    addToDoList, 
-    addToFavorites,
-    showAllTrails,
-    type
+    showAllTrails, 
+    type,
+    user
   } = props
 
-  const displayAllTrails = () => {
+  const displayTrailCards = () => {
     return allTrails.map(trail => {
-      return <TrailCard trail={trail} selectTrail={props.selectTrail}/>
+      return <TrailCard trail={trail} selectTrail={selectTrail}/>
     })
   }
 
@@ -28,11 +29,13 @@ export default function HikeTrailsPage(props) {
     const trail = selectedTrail
     return <TrailSpecs 
       trail={trail}
+      saveToList={saveToList}
       addToCompleted={addToCompleted} 
-      addToDoList={addToDoList} 
+      addToBucketList={addToBucketList} 
       addToFavorites={addToFavorites}
       showAllTrails={showAllTrails}
       type={type}
+      user={user}
     />
   }
 
@@ -47,7 +50,7 @@ export default function HikeTrailsPage(props) {
         <input type="text" onChange={event => handleChange(event)}/>
       </form>
       <div className="trails-section">
-        {selectedTrail ? displayTrailSpecs() : displayAllTrails()}
+        {selectedTrail ? displayTrailSpecs() : displayTrailCards()}
       </div>
     </div>
   )

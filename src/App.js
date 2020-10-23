@@ -4,14 +4,10 @@ import {Switch, Route} from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import BikeTrailsPage from './components/BikeTrailsPage';
 import HikeTrailsPage from './components/HikeTrailsPage';
-import BucketListPage from './components/BucketListPage';
-import Completed from './components/Completed';
-import CampPage from './components/CampPage';
-import FavoritesPage from './components/FavoritesPage';
+import SavedTrailsPage from './components/SavedTrailsPage';
 import SideBar from './components/SideBar';
-import LoginPage from './components/LoginPage/LoginPage';
-// import Contact from './components/Contact';
-import {parseJSON, postTrailToBackend, authHeaders} from './components/hooks/customHooks'
+import LoginPage from './loginForms/LoginPage';
+import {postTrailToBackend, bikeBaseURL, hikeBaseURL, apiKey} from './components/hooks/customHooks'
 
 function App() {
 
@@ -19,7 +15,12 @@ function App() {
   const [filteredBikeTrails, setFilteredBikeTrails] = useState([])
   const [isLoggedIn, setLogin] = useState(false)
   const [user, setUser] = useState(null)
+  const [address, setAddress] = useState(null)
   const [selectedTrail, setTrailSelection] = useState(null)
+  const [favoriteTrails, setFavoriteTrails] = useState([])
+  const [completedTrails, setCompletedTrails] = useState([])
+  const [bucketListTrails, setBucketListTrails] = useState([])
+
 
   const [allHikingTrails, setHikingTrails] = useState([])
   const [filteredHikeTrails, setFilteredHikeTrails] = useState([])
@@ -34,15 +35,6 @@ function App() {
       )
     setFilteredBikeTrails(searchFilterResponse)
   }
-
-  const baseURL = 'http://localhost:3000';
-  const completedURL = `${baseURL}/completed_trails`;
-  const favoritesURL = `${baseURL}/favorites`;
-  const bucketlistURL = `${baseURL}/bucket_lists`;
-
-
-  const bikeBaseURL = `https://www.mtbproject.com/data/get-trails`
-  const hikeBaseURL = `https://www.hikingproject.com/data/get-trails`
   
   let lat = user ? "37.2753" : "39.7392"
   let lon = user ? "-107.8801" : "-104.9903"
@@ -50,13 +42,13 @@ function App() {
 
   let queryParams = `lat=${lat}&lon=${lon}&maxDistance=${maxDistance}&maxResults=200`
   const apiKey = `key=${process.env.REACT_APP_HIKING_PROJECT_API_KEY}`
- 
+
   useEffect(() => {
     const fetchBikeData = async () => {
       try {
-        const result = await fetch(`${bikeBaseURL}?${queryParams}&${apiKey}`);
+        const response = await fetch(`${bikeBaseURL}?${queryParams}&${apiKey}`);
         
-        const data = await result.json();
+        const data = await response.json();
         setBikeTrails(data.trails)
         setFilteredBikeTrails(data.trails);
       } catch(err) {
@@ -69,8 +61,8 @@ function App() {
   useEffect(() => {
     const fetchHikeData = async () => {
       try {
-        const result = await fetch(`${hikeBaseURL}?${queryParams}&${apiKey}`);
-        const data = await result.json();
+        const response = await fetch(`${hikeBaseURL}?${queryParams}&${apiKey}`);
+        const data = await response.json();
         setHikingTrails(data.trails)
         setFilteredHikeTrails(data.trails);
       } catch(err) {
@@ -80,9 +72,19 @@ function App() {
     fetchHikeData()
   }, [])
 
-  const loginUser = (user) => {
-    setUser(user)
+  const loginUser = (loginUser) => {
+    setUser(loginUser)
     setLogin(true)
+  }
+
+  const loadCompleted = (completed) => {
+    setCompletedTrails(completed)
+  }
+  const loadFavorites = (favorites) => {
+    setFavoriteTrails(favorites)
+  }
+  const loadBucketList = (completed) => {
+    setBucketListTrails(completed)
   }
 
   const showAllTrails = () => {
@@ -93,30 +95,46 @@ function App() {
     setTrailSelection(trail)
   }
 
-  const addToCompleted = (_, trail_id, trail_type) => {
-    postTrailToBackend(completedURL, trail_id, trail_type, user)
+  const saveToList = (_, trail_id, trail_type, url, user ) => {
+    postTrailToBackend(url, trail_id, trail_type, user)
   }
 
-  const addToDoList = (_, trail_id, trail_type) => {
-    postTrailToBackend(bucketlistURL, trail_id, trail_type, user)
+  const addToFavorites = (trail_id, trail_type) => {
+    const trail = { trail_id, trail_type}
+    setFavoriteTrails(...favoriteTrails, trail)
   }
 
-  const addToFavorites = (_, trail_id, trail_type) => {
-    postTrailToBackend(favoritesURL, trail_id, trail_type, user)
+  const addToCompleted = (trail_id, trail_type) => {
+    const trail = { trail_id, trail_type}
+    setCompletedTrails(...completedTrails, trail)
+  }
+
+  const addToBucketList = (trail_id, trail_type) => {
+    const trail = { trail_id, trail_type}
+    setBucketListTrails(...bucketListTrails, trail)
   }
 
   return (
     <div className="App">
-      <SideBar user={user}/>
+      <SideBar user={user} showAllTrails={showAllTrails} />
       <main className="main-section">
         <Switch>
-          <Route path="/login" render={ (routeProps) => <LoginPage loginUser={loginUser} {...routeProps} /> } />
+          <Route path="/login" render={ (routeProps) => <LoginPage 
+            loginUser={loginUser} 
+            {...routeProps} 
+            loadCompleted={loadCompleted} 
+            loadFavorites={loadFavorites} 
+            loadBucketList={loadBucketList} 
+            /> } 
+          />
           <Route path="/rides" render={ () => <BikeTrailsPage 
-            addToCompleted={addToCompleted} 
-            addToDoList={addToDoList} 
-            addToFavorites={addToFavorites} 
+            user={user}
+            saveToList={saveToList} 
+            addToFavorites={addToFavorites}
+            addToCompleted={addToCompleted}
+            addToBucketList={addToBucketList}
             allTrails={allBikeTrails} 
-            filteredBikeTrails={filteredBikeTrails} 
+            filteredTrailList={filteredBikeTrails} 
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
@@ -125,11 +143,13 @@ function App() {
             /> } 
           />
           <Route path="/hikes" render={ () => <HikeTrailsPage 
-            addToCompleted={addToCompleted} 
-            addToDoList={addToDoList} 
-            addToFavorites={addToFavorites} 
+            user={user}
+            saveToList={saveToList}  
+            addToFavorites={addToFavorites}
+            addToCompleted={addToCompleted}
+            addToBucketList={addToBucketList}
             allTrails={allHikingTrails} 
-            filteredBikeTrails={filteredHikeTrails} 
+            filteredTrailList={filteredHikeTrails} 
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
@@ -137,12 +157,46 @@ function App() {
             type={"hike"} 
             /> } 
           />
-          <Route path="/camp" render={ () => <CampPage user={user} /> } />
-          <Route path="/completed" render={ () => <Completed user={user} />} />
-          <Route path="/bucket-list" render={ () => <BucketListPage user={user} /> } />
-          <Route path="/favorites" render={ () => <FavoritesPage user={user} /> } />
+          <Route path="/camp" render={ () => <SavedTrailsPage user={user} /> } />
+          <Route path="/completed" render={ () => <SavedTrailsPage 
+            title={"completed"}
+            user={user} 
+            saveToList={saveToList}  
+            addToFavorites={addToFavorites}
+            addToCompleted={addToCompleted}
+            addToBucketList={addToBucketList} 
+            selectTrail={selectTrail} 
+            selectedTrail={selectedTrail}
+            showAllTrails={showAllTrails}
+            savedTrails={completedTrails} 
+            /> }
+          />
+          <Route path="/bucket-list" render={ () => <SavedTrailsPage 
+            title={"bucket-list"}
+            user={user} 
+            saveToList={saveToList}  
+            addToFavorites={addToFavorites}
+            addToCompleted={addToCompleted}
+            addToBucketList={addToBucketList}
+            selectTrail={selectTrail} 
+            selectedTrail={selectedTrail}
+            showAllTrails={showAllTrails}
+            savedTrails={bucketListTrails} 
+            /> }
+          />
+          <Route path="/favorites" render={ () => <SavedTrailsPage 
+            title={"favorites"}
+            user={user} 
+            saveToList={saveToList}  
+            addToFavorites={addToFavorites}
+            addToCompleted={addToCompleted}
+            addToBucketList={addToBucketList}
+            selectTrail={selectTrail} 
+            selectedTrail={selectedTrail}
+            savedTrails={favoriteTrails} 
+            /> }
+          />
           <Route path="/" render={ () => <LandingPage user={user} /> } />
-          {/* <LandingPage bikeOrHike={bikeOrHike} allBikeTrails={allBikeTrails} allHikeTrails={allHikingTrails} setChoice={setChoice}/> */}
         </Switch>
       </main>
       <p className="hidden" id="logout-text">Log Out</p>

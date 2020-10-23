@@ -1,19 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react';
+import { parseJSON, loginURL, setToken } from '../components/hooks/customHooks'
 
 export default function LoginForm(props) {
-
+  
+  const { handleError, handleChange, showUserData } = props
+  
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-
-  const {parseJSON, setToken, handleError, showUserData, handleChange} = props
-
-  const authHeaders = { 
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.token}`
-  }
-
-  const baseURL = 'http://localhost:3000';
-  const loginURL = `${baseURL}/login`;
 
   function loginUser(){ 
     const user = { username, password }
