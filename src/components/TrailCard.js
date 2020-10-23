@@ -89,10 +89,10 @@ export default function TrailCard(props) {
 
   return (
     <div className="trail-card" onClick={showSpecsCard}>
+      {trailTypeIcon()}
       <p>{trail.name}</p>
       <p className="bold">{calculateTime(trail, type)} hrs</p>
       {statusElement()}
-      {trailTypeIcon()}
     </div>
   )
 }

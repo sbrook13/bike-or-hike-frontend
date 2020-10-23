@@ -102,6 +102,13 @@ p {
   text-align: center;
 }
 
+.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+  text-align: center;
+}
+
 .trail-card {
   box-shadow: 0 8px 8px -6px grey;
   margin: .2rem;

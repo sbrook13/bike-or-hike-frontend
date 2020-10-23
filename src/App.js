@@ -12,7 +12,7 @@ import {postTrailToBackend, bikeBaseURL, hikeBaseURL} from './components/hooks/c
 function App() {
 
   const [allBikeTrails, setBikeTrails] = useState([])
-  const [filteredBikeTrails, setFilteredBikeTrails] = useState([])
+  const [allHikingTrails, setHikingTrails] = useState([])
   const [isLoggedIn, setLogin] = useState(false)
   const [user, setUser] = useState(null)
   const [address, setAddress] = useState(null)
@@ -20,21 +20,9 @@ function App() {
   const [favoriteTrails, setFavoriteTrails] = useState([])
   const [completedTrails, setCompletedTrails] = useState([])
   const [bucketListTrails, setBucketListTrails] = useState([])
+  const [dynamicHikeList, setDynamicHikeList] = useState("")
+  const [dynamicBikeList, setDynamicBikeList] = useState("")
 
-
-  const [allHikingTrails, setHikingTrails] = useState([])
-  const [filteredHikeTrails, setFilteredHikeTrails] = useState([])
-  
-  const filterTrails = (event) => {
-    const input = event.target.value
-    const searchFilterResponse = allBikeTrails.filter(trail => (
-        trail.name
-          .toLowerCase()
-          .includes(input.toLowerCase())  
-        )
-      )
-    setFilteredBikeTrails(searchFilterResponse)
-  }
   
   let lat = user ? "37.2753" : "39.7392"
   let lon = user ? "-107.8801" : "-104.9903"
@@ -47,10 +35,9 @@ function App() {
     const fetchBikeData = async () => {
       try {
         const response = await fetch(`${bikeBaseURL}?${queryParams}&${apiKey}`);
-        
         const data = await response.json();
         setBikeTrails(data.trails)
-        setFilteredBikeTrails(data.trails);
+        setDynamicBikeList(...dynamicBikeList, data.trails)
       } catch(err) {
         // error handling code
       }
@@ -64,7 +51,8 @@ function App() {
         const response = await fetch(`${hikeBaseURL}?${queryParams}&${apiKey}`);
         const data = await response.json();
         setHikingTrails(data.trails)
-        setFilteredHikeTrails(data.trails);
+        setDynamicHikeList(...dynamicHikeList, data.trails)
+        console.log(dynamicHikeList)
       } catch(err) {
         // error handling code
       }
@@ -155,18 +143,18 @@ function App() {
           />
           <Route path="/rides" render={ () => <AllTrailsPage 
             user={user}
-            saveToList={saveToList}  
+            saveToList={saveToList}
+            dynamicList={dynamicBikeList}
+            setDynamicList={setDynamicBikeList}
             addToFavorites={addToFavorites}
             removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
             removeFromBucketList={removeFromBucketList}
-            filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             allTrails={allBikeTrails} 
-            filteredTrailList={filteredBikeTrails} 
             type={"bike"}
             status={"all"}
             /> } 
@@ -174,17 +162,19 @@ function App() {
           <Route path="/hikes" render={ () => <AllTrailsPage 
             user={user}
             saveToList={saveToList}  
+            dynamicList={dynamicHikeList}
+            setDynamicList={setDynamicHikeList}
+            setDynamicBikeList={setDynamicBikeList}
+            setDynamicHikeList={setDynamicHikeList}
             addToFavorites={addToFavorites}
             removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
             removeFromBucketList={removeFromBucketList}
-            filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             allTrails={allHikingTrails} 
-            filteredTrailList={filteredHikeTrails} 
             type={"hike"} 
             status={"all"}
             /> } 
@@ -197,7 +187,6 @@ function App() {
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
             removeFromBucketList={removeFromBucketList}
-            filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
@@ -213,7 +202,6 @@ function App() {
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
             removeFromBucketList={removeFromBucketList}
-            filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
@@ -230,7 +218,6 @@ function App() {
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
             removeFromBucketList={removeFromBucketList}
-            filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
@@ -240,17 +227,16 @@ function App() {
             /> }
           />
           <Route path="/favorites" render={ () => <SavedTrailsPage 
-            user={user}
-            saveToList={saveToList}  
-            addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
-            addToCompleted={addToCompleted}
-            addToBucketList={addToBucketList}
-            removeFromBucketList={removeFromBucketList}
-            filterTrails={filterTrails} 
-            selectTrail={selectTrail} 
-            selectedTrail={selectedTrail} 
-            showAllTrails={showAllTrails}
+             user={user}
+             saveToList={saveToList} 
+             addToFavorites={addToFavorites}
+             removeFromFavorites={removeFromFavorites}
+             addToCompleted={addToCompleted}
+             addToBucketList={addToBucketList}
+             removeFromBucketList={removeFromBucketList}
+             selectTrail={selectTrail} 
+             selectedTrail={selectedTrail} 
+             showAllTrails={showAllTrails}
             title={"The Best of the Best"}
             savedTrails={favoriteTrails} 
             status={'favorite'}
