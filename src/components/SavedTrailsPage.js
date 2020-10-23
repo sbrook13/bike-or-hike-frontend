@@ -11,6 +11,7 @@ export default function SavedTrailsPage(props) {
   const { 
     title, 
     user, 
+    calculateTime,
     saveToList, 
     addToFavorites,
     addToCompleted,
@@ -54,6 +55,7 @@ export default function SavedTrailsPage(props) {
     const trail = selectedTrail
     return <TrailSpecs 
       trail={trail}
+      calculateTime={calculateTime}
       saveToList={saveToList}
       addToCompleted={addToCompleted} 
       addToBucketList={addToBucketList} 
@@ -65,10 +67,12 @@ export default function SavedTrailsPage(props) {
   }
 
   return (
-    <div className="main-page">
-      <h1>{title}</h1>
-      { savedTrails[0] ? null : <p>You have no trips saved here.</p> }
-      { selectedTrail ? displayTrailSpecs() : displayTrailCards() }
+    <div className="flex-row-container">
+      <h1 className="title">{title}</h1>
+      <div className="trails-section">
+        { savedTrails[0] ? null : <p>You have no trips saved here.</p> }
+        { selectedTrail ? displayTrailSpecs() : displayTrailCards() }
+      </div>
     </div>
   )
 }

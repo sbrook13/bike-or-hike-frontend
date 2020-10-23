@@ -47,7 +47,7 @@ p {
 }
 
 .sidebar-icon, .icon {
-  padding: 1rem 1rem 0 1rem;
+  margin: 1rem 1rem 0 1rem;
 }
 
 .specs-icon, .detail {
@@ -62,6 +62,7 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   position: relative;
   padding-left: 5%;
   width: 95%;
@@ -78,10 +79,20 @@ p {
   padding-left: 5%;
 }
 
+.landing-page-address {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .center {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+}
+
+.title {
+  margin: 1rem;
 }
 
 .trails-section {
@@ -107,12 +118,20 @@ p {
   font-size: 8pt;
 }
 
+.trail-card:hover {
+  background-color: rgba(181,193,180, .5)
+}
+
+.trail-card:active {
+  background-color: rgb(231, 154, 10);
+}
+
 .specs-card {
   position: absolute;
   width: 45%;
-  height: 65%;
+  height: fit-content;
   left: 35%;
-  top: 15%;
+  top: 10%;
   z-index: 1;
   box-shadow: 0 8px 8px -6px grey;
   border-radius: 8px;
@@ -132,24 +151,37 @@ p {
  text-align: center;
 }
 
-.specs-icon-header, .specs {
+.specs-icon-header {
   display: flex;
   justify-content: space-between;
   text-align: center;
 }
 
 .specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  text-align: center;
   margin-top: .5rem;
   padding-bottom: .5rem; 
   margin-bottom: .5rem;
   border-bottom: solid 1px rgb(65, 65, 65);
 }
+
+form {
+  margin: 1rem;
+}
+
 input {
   padding: .5rem;
   margin: .25rem;
   width: 13rem;
   border-radius: 25px;
   border: solid .5px rgba(65, 65, 65, .3)
+}
+
+input:focus {
+  outline: none;
 }
 
 .btn {
@@ -179,9 +211,12 @@ input {
 
 #activity-choice {
   color: rgb(231, 154, 10);
-  font-weight: 700;
   letter-spacing: 0px;
   border-bottom: 5px solid rgb(231, 154, 10);
+}
+
+.bold {
+  font-weight:700
 }
 
 #logout-x {

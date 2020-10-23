@@ -8,7 +8,7 @@ import CampingPage from './components/CampingPage';
 import SavedTrailsPage from './components/SavedTrailsPage';
 import SideBar from './components/SideBar';
 import LoginPage from './loginForms/LoginPage';
-import {postTrailToBackend, bikeBaseURL, hikeBaseURL, apiKey} from './components/hooks/customHooks'
+import {postTrailToBackend, bikeBaseURL, hikeBaseURL} from './components/hooks/customHooks'
 
 function App() {
 
@@ -83,6 +83,10 @@ function App() {
     setLogin(false)
     localStorage.clear()
     window.location.href = '/'
+  }
+
+  const storeAddress = (address) => {
+    setAddress(address)
   }
 
   const loadCompleted = (completed) => {
@@ -225,7 +229,7 @@ function App() {
             savedTrails={favoriteTrails} 
             /> }
           />
-          <Route path="/" render={ () => <LandingPage user={user} /> } />
+          <Route path="/" render={ () => <LandingPage user={user} storeAddress={storeAddress} address={address} /> } />
         </Switch>
       </main>
       <p className="hidden" id="logout-text">Log Out</p>
