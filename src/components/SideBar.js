@@ -10,12 +10,6 @@ import { faBicycle,
   faListAlt } 
   from '@fortawesome/free-solid-svg-icons';
 
-// import LandingPage from './components/LandingPage';
-// import BikeTrailsPage from './components/BikeTrailsPage';
-// import HikeTrailsPage from './components/HikeTrailsPage';
-// import FavoritesPage from './components/FavoritesPage';
-
-
 function SideBar(props) {
   const { user, showAllTrails, logoutUser } = props
 
@@ -59,11 +53,11 @@ function SideBar(props) {
         {showSideIcons(pageLinks)}
         { user ? showSideIcons(userLinks) : null }
         { user ? null : <Link to="/login">
-          <p className="login-text sidebar-icon">LOGIN</p>
+          <p className="login-text icon">LOGIN</p>
         </Link> }
       </nav>
         <FontAwesomeIcon icon={faTimes} 
-          className="sidebar-icon logout-x" 
+          className="icon specs-icon logout-x" 
           size="2x" 
           onMouseEnter={handleXHover} 
           onMouseLeave={handleXHover} 

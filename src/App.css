@@ -13,6 +13,7 @@ h1 {
 
 h2 {
   font-size: 18pt;
+  padding: 1rem
 }
 
 h3 {
@@ -45,8 +46,16 @@ p {
   flex-direction: column;
 }
 
-.sidebar-icon {
-  margin-top: 1rem;
+.sidebar-icon, .icon {
+  padding: 1rem 1rem 0 1rem;
+}
+
+.specs-icon, .detail {
+  margin: .5rem;
+}
+
+.icon:hover {
+  color: rgb(231, 154, 10);
 }
 
 .main-section {
@@ -76,34 +85,85 @@ p {
 }
 
 .trails-section {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  text-align: center;
 }
 
 .trail-card {
   box-shadow: 0 8px 8px -6px grey;
   margin: .2rem;
   padding: .5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(233, 233, 233, 0.5)
 }
+
 .trail-card p {
   font-size: 8pt;
 }
 
-.trail-specs{
+.specs-card {
   position: absolute;
   width: 45%;
   height: 65%;
   left: 35%;
-  top: 25%;
+  top: 15%;
   z-index: 1;
   box-shadow: 0 8px 8px -6px grey;
   border-radius: 8px;
   background-color: rgba(181, 193, 180, 0.5);
   padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
 }
 
-.icon {
-  padding: 1rem;
+.specs-header, .specs-summary, #login-section, #login-form, #create-user-form, #new-user-section {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-direction: column;
+ text-align: center;
+}
+
+.specs-icon-header, .specs {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.specs {
+  margin-top: .5rem;
+  padding-bottom: .5rem; 
+  margin-bottom: .5rem;
+  border-bottom: solid 1px rgb(65, 65, 65);
+}
+input {
+  padding: .5rem;
+  margin: .25rem;
+  width: 13rem;
+  border-radius: 25px;
+  border: solid .5px rgba(65, 65, 65, .3)
+}
+
+.btn {
+  color: white;
+  background-color: rgba(65, 65, 65, .5);
+  width: 8rem;
+  padding: .5rem 1.5rem .5rem 1.5rem;
+  margin: .5rem;
+  border-radius: 25px;
+  border: none; 
+}
+
+.btn:hover {
+  background-color: rgb(231, 154, 10)
 }
 
 .icon-trio {
@@ -124,10 +184,6 @@ p {
   border-bottom: 5px solid rgb(231, 154, 10);
 }
 
-.sidebar-icon:hover {
-  color: rgb(231, 154, 10);
-}
-
 #logout-x {
   margin: 2rem;
 }
@@ -135,9 +191,10 @@ p {
 #logout-text {
   z-index: 10;
   position: absolute;
-  left: 6%;
+  left: 7%;
   top: 96%;
   font-size: 10pt;
+  color:rgb(231, 154, 10);
 }
 .login-text{
   font-size: 10px;
