@@ -40,7 +40,7 @@ function SideBar(props) {
         <Link to={link[1]} onClick={showAllTrails}>
           <FontAwesomeIcon icon={link[0]} 
             size="1x" 
-            className="sidebar-icon" 
+            className="sidebar-icon icon" 
           />
         </Link>
       )
@@ -53,7 +53,7 @@ function SideBar(props) {
         {showSideIcons(pageLinks)}
         { user ? showSideIcons(userLinks) : null }
         { user ? null : <Link to="/login">
-          <p className="login-text icon">LOGIN</p>
+          <p className="login-text sidebar-icon icon">LOGIN</p>
         </Link> }
       </nav>
         <FontAwesomeIcon icon={faTimes} 

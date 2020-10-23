@@ -85,6 +85,10 @@ function App() {
     window.location.href = '/'
   }
 
+  const storeAddress = (address) => {
+    setAddress(address)
+  }
+
   const loadCompleted = (completed) => {
     setCompletedTrails(completed)
   }
@@ -225,7 +229,7 @@ function App() {
             savedTrails={favoriteTrails} 
             /> }
           />
-          <Route path="/" render={ () => <LandingPage user={user} /> } />
+          <Route path="/" render={ () => <LandingPage user={user} storeAddress={storeAddress} address={address} /> } />
         </Switch>
       </main>
       <p className="hidden" id="logout-text">Log Out</p>
