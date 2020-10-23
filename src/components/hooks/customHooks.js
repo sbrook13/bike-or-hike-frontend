@@ -32,4 +32,14 @@ export function parseJSON(response) {
   return response.json()
 }
 
+export const calculateTime = (trail, type) => {
+  if (type === 'bike') {
+    const timeInHours = ( trail['length'] / 8 ) + (trail.ascent / 2500) 
+    return timeInHours.toFixed(1)
+  } else {
+    const timeInHours = ( trail['length'] / 2.5 ) + (trail.ascent / 1500)
+    return timeInHours.toFixed(1)
+  }
+}
+
 

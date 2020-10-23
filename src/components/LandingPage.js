@@ -52,7 +52,7 @@ export default function LandingPage({user, storeAddress, address}) {
         <h2>Welcome, {user.name}!</h2> : 
         showAddressForm()
       }
-      <h1 id="activity-text">I want to <span id="activity-choice">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</span></h1>
+      <h1 id="activity-text">I want to <span id="activity-choice" className="bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.</span></h1>
       <div className="icon-trio">
         <Link to="/rides">
           <FontAwesomeIcon 

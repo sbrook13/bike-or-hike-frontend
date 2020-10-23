@@ -8,7 +8,7 @@ import CampingPage from './components/CampingPage';
 import SavedTrailsPage from './components/SavedTrailsPage';
 import SideBar from './components/SideBar';
 import LoginPage from './loginForms/LoginPage';
-import {postTrailToBackend, bikeBaseURL, hikeBaseURL, apiKey} from './components/hooks/customHooks'
+import {postTrailToBackend, bikeBaseURL, hikeBaseURL} from './components/hooks/customHooks'
 
 function App() {
 

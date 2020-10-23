@@ -36,7 +36,7 @@ export default function BikeTrailsPage(props) {
 
   const displayTrailCards = () => {
     return allTrails.map(trail => {
-      return <TrailCard trail={trail} selectTrail={selectTrail} />
+      return <TrailCard trail={trail} type={type} selectTrail={selectTrail} />
     })
   }
 

@@ -43,7 +43,7 @@ export default function LoginPage(props) {
   }
 
   const showForm = (loginType) => { 
-    if (loginType == "login") {
+    if (loginType === "login") {
     return <LoginForm 
       handleError={handleError} 
       handleChange={handleChange} 

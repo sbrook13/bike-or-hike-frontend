@@ -1,5 +1,5 @@
 import React from 'react'
-import { completedURL, favoritesURL, bucketlistURL } from './hooks/customHooks'
+import { completedURL, favoritesURL, bucketlistURL, calculateTime } from './hooks/customHooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBicycle, 
   faShoePrints, 
@@ -12,19 +12,21 @@ import { faBicycle,
 
 export default function TrailSpecs(props) {
 
-  const {trail, saveToList, addToCompleted, addToBucketList, addToFavorites, showAllTrails, type, user } = props
+  const {
+    trail, 
+    saveToList, 
+    addToCompleted, 
+    addToBucketList, 
+    addToFavorites, 
+    showAllTrails, 
+    type, 
+    user 
+  } = props
  
-  const calculateTime = () => {
-    const timeInHours = ( trail['length'] / 5 ) + (trail.ascent / 2000)
-    return timeInHours.toFixed(1)
-  }
-
   const handleSaveClick = (_, trail_id, trail_type, url, user, addToListFunction) => {
     saveToList(_, trail_id, trail_type, url, user)
     addToListFunction(trail_id, trail_type)
-    console.log(user)
   }
-
 
   return (
     <div className="specs-card">
@@ -42,6 +44,7 @@ export default function TrailSpecs(props) {
           />
         }
         <h2>{trail.name}</h2>
+        <h3>Estimated Trail Time: {calculateTime(trail, type)}hrs</h3>
       </header>
       <section className="specs-icon-header">
         <p onClick={showAllTrails}>        

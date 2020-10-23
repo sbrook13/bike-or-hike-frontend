@@ -47,7 +47,7 @@ p {
 }
 
 .sidebar-icon, .icon {
-  padding: 1rem 1rem 0 1rem;
+  margin: 1rem 1rem 0 1rem;
 }
 
 .specs-icon, .detail {
@@ -89,6 +89,10 @@ p {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+}
+
+.title {
+  margin: 1rem;
 }
 
 .trails-section {
@@ -147,13 +151,17 @@ p {
  text-align: center;
 }
 
-.specs-icon-header, .specs {
+.specs-icon-header {
   display: flex;
   justify-content: space-between;
   text-align: center;
 }
 
 .specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  text-align: center;
   margin-top: .5rem;
   padding-bottom: .5rem; 
   margin-bottom: .5rem;
@@ -203,9 +211,12 @@ input:focus {
 
 #activity-choice {
   color: rgb(231, 154, 10);
-  font-weight: 700;
   letter-spacing: 0px;
   border-bottom: 5px solid rgb(231, 154, 10);
+}
+
+.bold {
+  font-weight:700
 }
 
 #logout-x {
