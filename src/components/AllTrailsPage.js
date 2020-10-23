@@ -2,13 +2,15 @@ import React from 'react'
 import TrailCard from './TrailCard'
 import TrailSpecs from './TrailSpecs'
 
-export default function BikeTrailsPage(props) {
+export default function AllTrailsPage(props) {
 
   const { 
     saveToList,
     addToFavorites,
+    removeFromFavorites,
     addToCompleted,
     addToBucketList,
+    removeFromBucketList,
     allTrails, 
     filteredTrailList, 
     filterTrails, 
@@ -16,7 +18,8 @@ export default function BikeTrailsPage(props) {
     selectedTrail, 
     showAllTrails, 
     type,
-    user
+    user,
+    status
   } = props
   
 
@@ -36,21 +39,24 @@ export default function BikeTrailsPage(props) {
 
   const displayTrailCards = () => {
     return allTrails.map(trail => {
-      return <TrailCard trail={trail} type={type} selectTrail={selectTrail} />
+      return <TrailCard trail={trail} type={type} status={status} selectTrail={selectTrail} />
     })
   }
 
   const displayTrailSpecs = () => {
     const trail = selectedTrail
     return <TrailSpecs 
-      trail={trail}
-      saveToList={saveToList}
-      addToCompleted={addToCompleted} 
-      addToBucketList={addToBucketList} 
-      addToFavorites={addToFavorites}
-      showAllTrails={showAllTrails}
-      type={type}
+      trail={trail} 
+      type={type} 
       user={user}
+      status={status}
+      selectTrail={selectTrail}
+      saveToList={saveToList}
+      addToFavorites={addToFavorites}
+      removeFromFavorites={removeFromFavorites}
+      addToCompleted={addToCompleted}
+      addToBucketList={addToBucketList}
+      removeFromBucketList={removeFromBucketList}
     />
   }
 

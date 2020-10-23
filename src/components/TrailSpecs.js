@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { completedURL, favoritesURL, bucketlistURL, calculateTime } from './hooks/customHooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBicycle, 
@@ -11,6 +11,10 @@ import { faBicycle,
   from '@fortawesome/free-solid-svg-icons';
 
 export default function TrailSpecs(props) {
+
+  const [heartColor, setHeartColor] = useState("rgb(65, 65, 65")
+  const [listColor, setListColor] = useState("rgb(65, 65, 65")
+  const [checkColor, setCheckColor] = useState("rgb(65, 65, 65")
 
   const {
     trail, 
@@ -55,22 +59,34 @@ export default function TrailSpecs(props) {
         </p>
         { user ?
           <>
-            <p onClick={(_) => handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted )}>        
+            <p onClick={(_) => {
+              handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted ); 
+              setCheckColor("rgb(231, 154, 10)");
+            }}>        
               <FontAwesomeIcon icon={faCheckSquare} 
                 size="1x" 
                 className="sidebar-icon specs-icon" 
+                color={checkColor}
               />
             </p>
-            <p onClick={(_) => saveToList(_, trail.id, type, bucketlistURL, user, addToBucketList )}>        
+            <p onClick={(_) => {
+              handleSaveClick(_, trail.id, type, bucketlistURL, user, addToBucketList );
+              setListColor("rgb(231, 154, 10)");
+            }}>        
               <FontAwesomeIcon icon={faListAlt} 
                 size="1x" 
                 className="sidebar-icon specs-icon" 
+                color={listColor}
               />
             </p>
-            <p onClick={(_) => saveToList(_, trail.id, type, favoritesURL, user, addToFavorites )}>        
+            <p onClick={(_) => {
+              handleSaveClick(_, trail.id, type, favoritesURL, user, addToFavorites );
+              setHeartColor("rgb(231, 154, 10)");
+            }}>        
               <FontAwesomeIcon icon={faHeart} 
                 size="1x" 
-                className="sidebar-icon specs-icon" 
+                className="sidebar-icon specs-icon"
+                color={heartColor} 
               />
             </p>
           </> :

@@ -2,8 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import {Switch, Route} from 'react-router-dom';
 import LandingPage from './components/LandingPage';
-import BikeTrailsPage from './components/BikeTrailsPage';
-import HikeTrailsPage from './components/HikeTrailsPage';
+import AllTrailsPage from './components/AllTrailsPage';
 import CampingPage from './components/CampingPage';
 import SavedTrailsPage from './components/SavedTrailsPage';
 import SideBar from './components/SideBar';
@@ -112,19 +111,30 @@ function App() {
   }
 
   const addToFavorites = (trail_id, trail_type) => {
-    const trail = { trail_id, trail_type}
+    const trail = { trail_id, trail_type }
     setFavoriteTrails(...favoriteTrails, trail)
   }
 
+  const removeFromFavorites = (trail_id) => {
+    const updatedFavorites = favoriteTrails.filter(favTrail => favTrail.trail_id !== trail_id)
+  } 
+
   const addToCompleted = (trail_id, trail_type) => {
-    const trail = { trail_id, trail_type}
+    const trail = { trail_id, trail_type }
+    removeFromBucketList(trail_id)
     setCompletedTrails(...completedTrails, trail)
   }
 
   const addToBucketList = (trail_id, trail_type) => {
-    const trail = { trail_id, trail_type}
-    setBucketListTrails(...bucketListTrails, trail)
+    const trail = { trail_id, trail_type }
+    if (!bucketListTrails.find(trail => trail.trail_id === trail_id)) {
+      setBucketListTrails(...bucketListTrails, trail)
+    }
   }
+
+  const removeFromBucketList = (trail_id) => {
+    const updatedBucketList = bucketListTrails.filter(listTrail => listTrail.trail_id !== trail_id)
+  } 
 
   return (
     <div className="App">
@@ -143,12 +153,14 @@ function App() {
             loadBucketList={loadBucketList} 
             /> } 
           />
-          <Route path="/rides" render={ () => <BikeTrailsPage 
+          <Route path="/rides" render={ () => <AllTrailsPage 
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
+            removeFromBucketList={removeFromBucketList}
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
@@ -156,14 +168,17 @@ function App() {
             allTrails={allBikeTrails} 
             filteredTrailList={filteredBikeTrails} 
             type={"bike"}
+            status={"all"}
             /> } 
           />
-          <Route path="/hikes" render={ () => <HikeTrailsPage 
+          <Route path="/hikes" render={ () => <AllTrailsPage 
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
+            removeFromBucketList={removeFromBucketList}
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
@@ -171,14 +186,17 @@ function App() {
             allTrails={allHikingTrails} 
             filteredTrailList={filteredHikeTrails} 
             type={"hike"} 
+            status={"all"}
             /> } 
           />
           <Route path="/camp" render={ () => <CampingPage 
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
+            removeFromBucketList={removeFromBucketList}
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
@@ -191,42 +209,51 @@ function App() {
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
+            removeFromBucketList={removeFromBucketList}
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             title={"Your Past Adventures"}
             savedTrails={completedTrails} 
+            status={'completed'}
             /> }
           />
           <Route path="/bucket-list" render={ () => <SavedTrailsPage 
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
+            removeFromBucketList={removeFromBucketList}
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             title={"Why Not Today?"}
             savedTrails={bucketListTrails} 
+            status={'bucket-list'}
             /> }
           />
           <Route path="/favorites" render={ () => <SavedTrailsPage 
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
+            removeFromFavorites={removeFromFavorites}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
+            removeFromBucketList={removeFromBucketList}
             filterTrails={filterTrails} 
             selectTrail={selectTrail} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             title={"The Best of the Best"}
             savedTrails={favoriteTrails} 
+            status={'favorite'}
             /> }
           />
           <Route path="/" render={ () => <LandingPage user={user} storeAddress={storeAddress} address={address} /> } />

@@ -11,15 +11,17 @@ export default function SavedTrailsPage(props) {
   const { 
     title, 
     user, 
-    calculateTime,
     saveToList, 
     addToFavorites,
+    removeFromFavorites,
     addToCompleted,
     addToBucketList,
+    removeFromBucketList,
     selectTrail,
     selectedTrail,
     savedTrails,
-    showAllTrails
+    showAllTrails,
+    status
   } = props
 
   const ridesByIdURL = `https://www.mtbproject.com/data/get-trails-by-id`
@@ -55,14 +57,16 @@ export default function SavedTrailsPage(props) {
     const trail = selectedTrail
     return <TrailSpecs 
       trail={trail}
-      calculateTime={calculateTime}
       saveToList={saveToList}
-      addToCompleted={addToCompleted} 
-      addToBucketList={addToBucketList} 
       addToFavorites={addToFavorites}
+      removeFromFavorites={removeFromFavorites}
+      addToCompleted={addToCompleted}
+      addToBucketList={addToBucketList}
+      removeFromBucketList={removeFromBucketList}
       showAllTrails={showAllTrails}
       type={trail.trail_type}
       user={user}
+      status={status}
     />
   }
 
