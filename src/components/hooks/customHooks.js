@@ -7,6 +7,8 @@ export const favoritesURL = `${baseURL}/favorites`;
 export const bucketlistURL = `${baseURL}/bucket_lists`;
 export const bikeBaseURL = `https://www.mtbproject.com/data/get-trails`;
 export const hikeBaseURL = `https://www.hikingproject.com/data/get-trails`;
+export const ridesByIdURL = `https://www.mtbproject.com/data/get-trails-by-id`
+export const hikesByIdURL = `https://www.hikingproject.com/data/get-trails-by-id`
 
 export const authHeaders = { 
   'Content-Type': 'application/json',

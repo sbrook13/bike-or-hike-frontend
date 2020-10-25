@@ -13,7 +13,6 @@ function App() {
 
   const [allBikeTrails, setBikeTrails] = useState([])
   const [allHikingTrails, setHikingTrails] = useState([])
-  const [isLoggedIn, setLogin] = useState(false)
   const [user, setUser] = useState(null)
   const [address, setAddress] = useState(null)
   const [selectedTrail, setTrailSelection] = useState(null)
@@ -52,7 +51,6 @@ function App() {
         const data = await response.json();
         setHikingTrails(data.trails)
         setDynamicHikeList(...dynamicHikeList, data.trails)
-        console.log(dynamicHikeList)
       } catch(err) {
         // error handling code
       }
@@ -62,12 +60,10 @@ function App() {
 
   const loginUser = (loginUser) => {
     setUser(loginUser)
-    setLogin(true)
   }
 
   const logoutUser = (user) => {
     setUser(null)
-    setLogin(false)
     localStorage.clear()
     window.location.href = '/'
   }
@@ -86,7 +82,8 @@ function App() {
     setBucketListTrails(bucket_list)
   }
 
-  const showAllTrails = () => {
+  const showAllTrails = (e) => {
+    e.stopPropagation()
     setTrailSelection(null)
   }
 
@@ -121,7 +118,10 @@ function App() {
   }
 
   const removeFromBucketList = (trail_id) => {
-    const updatedBucketList = bucketListTrails.filter(listTrail => listTrail.trail_id !== trail_id)
+    if (bucketListTrails.find(trail => trail.trail_id === trail_id) ){
+      const updatedBucketList = bucketListTrails.filter(listTrail => listTrail.trail_id !== trail_id)
+      setBucketListTrails(updatedBucketList)
+    }
   } 
 
   return (
@@ -156,7 +156,7 @@ function App() {
             showAllTrails={showAllTrails}
             allTrails={allBikeTrails} 
             type={"bike"}
-            status={"all"}
+            category={"all"}
             /> } 
           />
           <Route path="/hikes" render={ () => <AllTrailsPage 
@@ -176,7 +176,7 @@ function App() {
             showAllTrails={showAllTrails}
             allTrails={allHikingTrails} 
             type={"hike"} 
-            status={"all"}
+            category={"all"}
             /> } 
           />
           <Route path="/camp" render={ () => <CampingPage 
@@ -207,7 +207,7 @@ function App() {
             showAllTrails={showAllTrails}
             title={"Your Past Adventures"}
             savedTrails={completedTrails} 
-            status={'completed'}
+            category={'completed'}
             /> }
           />
           <Route path="/bucket-list" render={ () => <SavedTrailsPage 
@@ -223,7 +223,7 @@ function App() {
             showAllTrails={showAllTrails}
             title={"Why Not Today?"}
             savedTrails={bucketListTrails} 
-            status={'bucket-list'}
+            category={'bucket-list'}
             /> }
           />
           <Route path="/favorites" render={ () => <SavedTrailsPage 
@@ -239,7 +239,7 @@ function App() {
              showAllTrails={showAllTrails}
             title={"The Best of the Best"}
             savedTrails={favoriteTrails} 
-            status={'favorite'}
+            category={'favorite'}
             /> }
           />
           <Route path="/" render={ () => <LandingPage user={user} storeAddress={storeAddress} address={address} /> } />

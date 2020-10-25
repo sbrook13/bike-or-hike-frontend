@@ -15,15 +15,16 @@ export default function TrailCard(props) {
     removeFromBucketList,
     selectTrail, 
     type, 
-    status, 
+    category, 
   } = props
 
-  const showSpecsCard = () => {
+  const showSpecsCard = (e) => {
+    e.stopPropagation()
     selectTrail(trail)
   }
 
   const statusElement = () => {
-    switch(status) {
+    switch(category) {
       case 'completed':
         return ( 
           <>
@@ -66,7 +67,7 @@ export default function TrailCard(props) {
   }
 
     const trailTypeIcon = () => {
-      if (status !== 'all'){
+      if (category !== 'all'){
         if (type === 'bike') { 
           return (
             <FontAwesomeIcon icon={faBicycle} 
@@ -88,7 +89,7 @@ export default function TrailCard(props) {
     }
 
   return (
-    <div className="trail-card" onClick={showSpecsCard}>
+    <div className="trail-card" onClick={e => showSpecsCard(e)}>
       {trailTypeIcon()}
       <p>{trail.name}</p>
       <p className="bold">{calculateTime(trail, type)} hrs</p>
