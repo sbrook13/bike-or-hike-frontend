@@ -1,59 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import TrailCard from './TrailCard';
 import TrailSpecs from './TrailSpecs';
-import {parseJSON} from './hooks/customHooks';
+import {parseJSON, ridesByIdURL, hikesByIdURL} from './hooks/customHooks';
 
-export default function SavedTrailsPage(props) {
+export default class SavedTrailsPage extends React.Component {
 
-  const [fullHikeTrailInfo, getFullHikeTrailInfo] = useState([])
-  const [fullBikeTrailInfo, getFullBikeTrailInfo] = useState([])
-
-  const { 
-    title, 
-    user, 
-    saveToList,
-    setDynamicBikeList,
-    setDynamicHikeList, 
-    addToFavorites,
-    removeFromFavorites,
-    addToCompleted,
-    addToBucketList,
-    removeFromBucketList,
-    selectTrail,
-    selectedTrail,
-    savedTrails,
-    showAllTrails,
-    status
-  } = props
-
-  const ridesByIdURL = `https://www.mtbproject.com/data/get-trails-by-id`
-  const hikesByIdURL = `https://www.hikingproject.com/data/get-trails-by-id`
-  const apiKey = `key=${process.env.REACT_APP_HIKING_PROJECT_API_KEY}`
-
-
-  const getHikeTrails = () =>{
-    const hikeTrailsOnly = savedTrails.filter(trail => trail.trail_type === 'hike')
-    const idString = saveIds(hikeTrailsOnly)
-    function fetchData(){
-      fetch(`${hikesByIdURL}?ids=${idString}&${apiKey}`)
-        .then(parseJSON)
-        .then(result => getFullHikeTrailInfo(result.trails))
-    }  
-    fetchData()
+  state = {
+    fullHikeTrailInfo: [],
+    fullBikeTrailInfo: []
   }
 
-  const getBikeTrails = () =>{
-    const bikeTrailsOnly = savedTrails.filter(trail => trail.trail_type === 'hike')
-    const idString = saveIds(bikeTrailsOnly)
-    function fetchData(){
-      fetch(`${ridesByIdURL}?ids=${idString}&${apiKey}`)
-        .then(parseJSON)
-        .then(result => getFullBikeTrailInfo(result.trails))
-    }  
-    fetchData()
-  }
-
-  const saveIds = (trailsArray) => {
+  saveIds = (trailsArray) => {
     let idArray = []
     trailsArray.map(trail => {
       idArray = [...idArray, trail.trail_id]
@@ -62,64 +19,69 @@ export default function SavedTrailsPage(props) {
     return idString
   }
 
-  // useEffect(() => {
-  //   function fetchData(){
-  //     const idString = saveIds()
-  //     fetch(`${ridesByIdURL}?ids=${idString}&${apiKey}`)
-  //       .then(parseJSON)
-  //       .then(result => getFullTrailInfo(...fullTrailInfo, result.trails))
-  //   }  
-  //   fetchData()
-  // }, [])
+  componentDidMount(){
+    const apiKey = `key=${process.env.REACT_APP_HIKING_PROJECT_API_KEY}`
+    const hikeTrailsOnly = this.props.savedTrails.filter(trail => trail.trail_type === 'hike')
+    const hikeIdString = this.saveIds(hikeTrailsOnly)
+    const bikeTrailsOnly = this.props.savedTrails.filter(trail => trail.trail_type === 'hike')
+    const bikeIdString = this.saveIds(bikeTrailsOnly)
+    fetch(`${hikesByIdURL}?ids=${hikeIdString}&${apiKey}`)
+      .then(parseJSON)
+      .then(result => this.setState({ fullHikeTrailInfo: result.trails })) 
+      .then(
+        fetch(`${ridesByIdURL}?ids=${bikeIdString}&${apiKey}`)
+          .then(parseJSON)
+          .then(result => this.setState({ fullBikeTrailInfo: result.trails }))
+      )
+  }
 
-  // getBikeData(ridesByIdURL)
-  // getHikeData(hikesByIdURL)
-
-  const displayTrailSections = () => {
+  displayTrailSections = () => {
     return (
       <>
         <div>
           <h2>Rides</h2> 
-          {displayTrailCards(fullBikeTrailInfo)} 
+          {this.displayTrailCards(this.state.fullBikeTrailInfo)} 
         </div>
         <div>
           <h2>Hikes</h2> 
-          {displayTrailCards(fullHikeTrailInfo)} 
+          {this.displayTrailCards(this.state.fullHikeTrailInfo)} 
         </div>
       </>
     )
   }
 
-  const displayTrailCards = (trailsArray) => {
+  displayTrailCards = (trailsArray) => {
     return trailsArray.map(trail => {
-      return <TrailCard trail={trail} selectTrail={selectTrail} />
+      return <TrailCard trail={trail} selectTrail={this.props.selectTrail} />
     })
   }
 
-  const displayTrailSpecs = () => {
-    const trail = selectedTrail
+  displayTrailSpecs = () => {
+    const trail = this.props.selectedTrail
     return <TrailSpecs 
       trail={trail}
-      saveToList={saveToList}
-      addToFavorites={addToFavorites}
-      removeFromFavorites={removeFromFavorites}
-      addToCompleted={addToCompleted}
-      addToBucketList={addToBucketList}
-      removeFromBucketList={removeFromBucketList}
-      showAllTrails={showAllTrails}
+      saveToList={this.props.saveToList}
+      addToFavorites={this.props.addToFavorites}
+      removeFromFavorites={this.props.removeFromFavorites}
+      addToCompleted={this.props.addToCompleted}
+      addToBucketList={this.props.addToBucketList}
+      removeFromBucketList={this.props.removeFromBucketList}
+      showAllTrails={this.props.showAllTrails}
       type={trail.trail_type}
-      user={user}
-      status={status}
+      user={this.props.user}
+      category={this.props.category}
     />
   }
 
-  return (
-    <div className="flex-row-container">
-      <h1 className="title">{title}</h1>
-      <div className="two-column">
-        { savedTrails[0] ? null : <p>You have no trips saved here.</p> }
-        { selectedTrail ? displayTrailSpecs() : displayTrailSections() }
+  render() {
+    return (
+      <div className="flex-row-container">
+        <h1 className="title">{this.props.title}</h1>
+        <div className="two-column">
+          { this.props.savedTrails[0] ? null : <p>You have no trips saved here.</p> }
+          { this.props.selectedTrail ? this.displayTrailSpecs() : this.displayTrailSections() }
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }

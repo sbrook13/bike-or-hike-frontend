@@ -50,8 +50,8 @@ export default function TrailSpecs(props) {
         <h2>{trail.name}</h2>
         <h3>Estimated Trail Time: {calculateTime(trail, type)}hrs</h3>
       </header>
-      <section className="specs-icon-header">
-        <p onClick={showAllTrails}>        
+      <section className="specs-icon-header">       
+        <p onClick={console.log("FA arrow clicked")}>
           <FontAwesomeIcon icon={faChevronLeft} 
             size="1x" 
             className="sidebar-icon specs-icon" 
@@ -59,14 +59,15 @@ export default function TrailSpecs(props) {
         </p>
         { user ?
           <>
-            <p onClick={(_) => {
-              handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted ); 
-              setCheckColor("rgb(231, 154, 10)");
-            }}>        
+            <p >        
               <FontAwesomeIcon icon={faCheckSquare} 
                 size="1x" 
                 className="sidebar-icon specs-icon" 
                 color={checkColor}
+                onClick={(_) => {
+                  handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted ); 
+                  setCheckColor("rgb(231, 154, 10)");
+                }}
               />
             </p>
             <p onClick={(_) => {
@@ -107,7 +108,7 @@ export default function TrailSpecs(props) {
         <p className="detail">Condition: {trail.conditionStatus}</p>
         <p className="detail">{trail.summary}</p>
         <a href={trail.url} target="_blank" rel="noopener noreferrer">
-          <button className="detail btn">More Details</button>
+          <button className="detail btn" onClick={console.log("details button clikced")}>More Details</button>
         </a>
       </section>
     </div>

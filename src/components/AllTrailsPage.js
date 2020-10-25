@@ -1,88 +1,69 @@
-import React, {useState} from 'react'
+import React from 'react'
 import TrailCard from './TrailCard'
 import TrailSpecs from './TrailSpecs'
 
-export default function AllTrailsPage(props) {
-  const { 
-    saveToList,
-    dynamicList,
-    setDynamicList,
-    addToFavorites,
-    removeFromFavorites,
-    addToCompleted,
-    addToBucketList,
-    removeFromBucketList,
-    allTrails, 
-    selectTrail, 
-    selectedTrail, 
-    type,
-    user,
-    status
-  } = props
+export default class AllTrailsPage extends React.Component {
 
-  const [inputValue, setInputValue] = useState("")
+  filterTrails = (event) => {
+    const input = event.target.value
+    const filteredTrails = this.props.allTrails.filter(trail => (
+        trail.name
+          .toLowerCase()
+          .includes(input.toLowerCase())  
+        )
+      )
+      this.props.setDynamicList(filteredTrails)
+  }
 
-  // const filterTrails = (event) => {
-  //   const input = event.target.value
-  //   const filteredTrails = dynamicList.filter(trail => (
-  //       trail.name
-  //         .toLowerCase()
-  //         .includes(input.toLowerCase())  
-  //       )
-  //     )
-  //     setDynamicList(filteredTrails)
-  // }
-
-  const trailPageWithSearch = () => {
+  trailPageWithSearch = () => {
     return (
       <>
         <form>
-        <label>Search Trails By Name:</label>
-        <input type="text" 
-        // onChange={filterTrails}
-        />
+          <label>Search Trails By Name:</label>
+          <input type="text" 
+          onChange={this.filterTrails}
+          />
         </form>
         <div className="trails-section">
-          {displayTrailCards()}
+          {this.displayTrailCards()}
         </div>
       </>
     )
   }
 
-  const displayTrailCards = () => {
-    console.log(allTrails)
-    return allTrails.map(trail => {
-      return <TrailCard trail={trail} type={type} status={status} selectTrail={selectTrail} />
-    })
-    
-    // if (dynamicList[0]){
-      
-    // } else {
-    //   setDynamicList(allTrails)
-    //   return <p>No trails match, try again!</p>
-    // }
+  displayTrailCards = () => {
+    if (this.props.dynamicList[0]){
+      return this.props.dynamicList.map(trail => {
+        return <TrailCard trail={trail} type={this.props.type} category={this.props.category} selectTrail={this.props.selectTrail} />
+      })
+    } else {
+      this.props.setDynamicList(this.props.allTrails)
+      return <p>No trails match, try again!</p>
+    }
   }
 
-  const displayTrailSpecs = () => {
-    const trail = selectedTrail
+  displayTrailSpecs = () => {
+    const trail = this.props.selectedTrail
     return <TrailSpecs 
       trail={trail} 
-      type={type} 
-      user={user}
-      status={status}
-      selectTrail={selectTrail}
-      saveToList={saveToList}
-      addToFavorites={addToFavorites}
-      removeFromFavorites={removeFromFavorites}
-      addToCompleted={addToCompleted}
-      addToBucketList={addToBucketList}
-      removeFromBucketList={removeFromBucketList}
+      type={this.props.type} 
+      user={this.props.user}
+      category={this.props.category}
+      selectTrail={this.props.selectTrail}
+      saveToList={this.props.saveToList}
+      addToFavorites={this.props.addToFavorites}
+      removeFromFavorites={this.props.removeFromFavorites}
+      addToCompleted={this.props.addToCompleted}
+      addToBucketList={this.props.addToBucketList}
+      removeFromBucketList={this.props.removeFromBucketList}
     />
   }
 
-  return (
-    <div className="flex-row-container">
-      {selectedTrail ? displayTrailSpecs() : trailPageWithSearch()}
-    </div>
-  )
+  render() {
+    return (
+      <div className="flex-row-container">
+        {this.props.selectedTrail ? this.displayTrailSpecs() : this.trailPageWithSearch()}
+      </div>
+    )
+  }
 }
