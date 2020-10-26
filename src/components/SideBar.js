@@ -7,8 +7,9 @@ import { faBicycle,
   faTimes,
   faHeart, 
   faCheckSquare, 
-  faListAlt } 
-  from '@fortawesome/free-solid-svg-icons';
+  faListAlt,
+  faQuestion
+ } from '@fortawesome/free-solid-svg-icons';
 
 function SideBar(props) {
   const { user, showAllTrails, logoutUser } = props
@@ -56,6 +57,12 @@ function SideBar(props) {
           <p className="login-text sidebar-icon icon">LOGIN</p>
         </Link> }
       </nav>
+      <div id="bottom-sidebar" className="icon-navigation">
+        <FontAwesomeIcon icon={faQuestion} 
+          className="icon specs-icon" 
+          size="1x" 
+          onClick={handleLogoutClick}
+        />
         <FontAwesomeIcon icon={faTimes} 
           className="icon specs-icon logout-x" 
           size="2x" 
@@ -63,6 +70,7 @@ function SideBar(props) {
           onMouseLeave={handleXHover} 
           onClick={handleLogoutClick}
         />
+      </div>
     </div>
   );
 }

@@ -81,6 +81,7 @@ export default function TrailSpecs(props) {
     const trailListed = list.find(savedTrail => savedTrail.trail_id === trail_id) 
     if (trailListed) {
       removeFromList(trail_id, trailListed.id, list, setFunction, url)
+      showAllTrails()
     }
   }
 

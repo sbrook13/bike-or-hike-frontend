@@ -7,6 +7,7 @@ import CampingPage from './components/CampingPage';
 import SavedTrailsPage from './components/SavedTrailsPage';
 import SideBar from './components/SideBar';
 import LoginPage from './loginForms/LoginPage';
+import Contact from './components/Contact';
 import {
   postTrailToBackend, 
   bikeBaseURL, 
@@ -252,6 +253,7 @@ function App() {
             category={'favorite'}
             /> }
           />
+          <Route path="/contact" render={ () => <Contact /> } />
           <Route path="/" render={ () => <LandingPage user={user} setAddress={setAddress} address={address} /> } />
         </Switch>
       </main>
