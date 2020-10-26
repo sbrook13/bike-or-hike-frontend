@@ -141,7 +141,7 @@ p {
   position: absolute;
   width: 45%;
   height: fit-content;
-  left: 35%;
+  left: 31%;
   top: 10%;
   z-index: 1;
   box-shadow: 0 8px 8px -6px grey;
@@ -177,6 +177,20 @@ p {
   padding-bottom: .5rem; 
   margin-bottom: .5rem;
   border-bottom: solid 1px rgb(65, 65, 65);
+}
+
+.contact-name{
+  letter-spacing: 3px;
+  font-size: 36pt;
+}
+
+li {
+  margin: 1rem;
+  color: rgb(231, 154, 10)
+}
+
+li:hover {
+  color: rgb(179, 76, 8)
 }
 
 form {
@@ -230,8 +244,8 @@ input:focus {
   font-weight:700
 }
 
-#logout-x {
-  margin: 2rem;
+.logout-x {
+  margin-bottom: 1rem;
 }
 
 #logout-text {
