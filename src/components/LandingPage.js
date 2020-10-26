@@ -3,21 +3,21 @@ import {Link} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBicycle, faShoePrints, faCampground, faTimes } from '@fortawesome/free-solid-svg-icons'
 
-export default function LandingPage({user, storeAddress, address}) {
+export default function LandingPage({user, setAddress, address}) {
 
-  const [addressInput, setAddress] = useState(null)
+  const [addressInput, storeAddress] = useState(null)
   const blankSpace = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
   
   const handleChange = (event) => {
-    setAddress(event.target.value)
+    storeAddress(event.target.value)
   }
   const handleSubmit = (event) => {
     event.preventDefault()
-    storeAddress(addressInput)
+    setAddress(addressInput)
   }
 
   const removeAddress = () => {
-    storeAddress(null)
+    setAddress(null)
   }
 
   const hoverIcon = (event, selection) => {

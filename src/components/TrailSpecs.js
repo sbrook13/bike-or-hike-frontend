@@ -19,18 +19,71 @@ export default function TrailSpecs(props) {
   const {
     trail, 
     saveToList, 
+    favoriteTrails,
+    completedTrails,
+    bucketListTrails,
     addToCompleted, 
     addToBucketList, 
     addToFavorites, 
+    setFavoriteTrails,
+    setCompletedTrails,
+    setBucketListTrails,
     showAllTrails, 
+    removeFromList,
     type, 
-    user 
+    user,
+    category
   } = props
  
-  const handleSaveClick = (_, trail_id, trail_type, url, user, addToListFunction) => {
-    saveToList(_, trail_id, trail_type, url, user)
-    addToListFunction(trail_id, trail_type)
+  const iconColor = (savedList, selectedIcon) => {
+    if (category === "all" ){
+      if (savedList[0]) {
+        if (savedList.find(savedTrail => savedTrail.trail_id === trail.id )){
+          selectedIcon("rgb(231, 154, 10)")
+        }
+      }
+    }
   }
+
+  const handleSaveClick = (_, selectTrail_id, trail_type, url, user, addToListFunction, savedList) => {
+    if (savedList[0]){
+      if(!savedList.find(savedTrail => savedTrail.trail_id === selectTrail_id)){
+        saveToList(_, selectTrail_id, trail_type, url, user)
+        addToListFunction(selectTrail_id, trail_type)
+      }
+    } else {
+      saveToList(_, selectTrail_id, trail_type, url, user)
+      addToListFunction(selectTrail_id, trail_type)
+    }
+  }
+
+  const removeThisTrail = (_, trail_id, category) => {
+    let list = []
+    let url =""
+    let setFunction = null
+    switch(category){
+      case 'favorites':
+        list = favoriteTrails
+        url = favoritesURL
+        setFunction = setFavoriteTrails
+        break;
+      case 'completed':
+        list = completedTrails 
+        url = completedURL
+        setFunction = setCompletedTrails
+        break;
+      case 'bucket-list':
+        list = bucketListTrails
+        url = bucketlistURL
+        setFunction = setBucketListTrails
+        break;
+    }
+    const trailListed = list.find(savedTrail => savedTrail.trail_id === trail_id) 
+    if (trailListed) {
+      removeFromList(trail_id, trailListed.id, list, setFunction, url)
+    }
+  }
+
 
   return (
     <div className="specs-card">
@@ -50,29 +103,30 @@ export default function TrailSpecs(props) {
         <h2>{trail.name}</h2>
         <h3>Estimated Trail Time: {calculateTime(trail, type)}hrs</h3>
       </header>
-      <section className="specs-icon-header">       
-        <p onClick={console.log("FA arrow clicked")}>
+      <section className="specs-icon-header">      
+        <p onClick={showAllTrails}>
           <FontAwesomeIcon icon={faChevronLeft} 
             size="1x" 
-            className="sidebar-icon specs-icon" 
+            className="sidebar-icon icon specs-icon" 
           />
         </p>
         { user ?
           <>
+            {iconColor(favoriteTrails, setHeartColor)}
+            {iconColor(completedTrails, setCheckColor)}
+            {iconColor(bucketListTrails, setListColor)}
             <p >        
               <FontAwesomeIcon icon={faCheckSquare} 
                 size="1x" 
                 className="sidebar-icon specs-icon" 
                 color={checkColor}
                 onClick={(_) => {
-                  handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted ); 
-                  setCheckColor("rgb(231, 154, 10)");
+                  handleSaveClick(_, trail.id, type, completedURL, user, addToCompleted, completedTrails ); 
                 }}
               />
             </p>
             <p onClick={(_) => {
-              handleSaveClick(_, trail.id, type, bucketlistURL, user, addToBucketList );
-              setListColor("rgb(231, 154, 10)");
+              handleSaveClick(_, trail.id, type, bucketlistURL, user, addToBucketList, bucketListTrails );
             }}>        
               <FontAwesomeIcon icon={faListAlt} 
                 size="1x" 
@@ -81,8 +135,7 @@ export default function TrailSpecs(props) {
               />
             </p>
             <p onClick={(_) => {
-              handleSaveClick(_, trail.id, type, favoritesURL, user, addToFavorites );
-              setHeartColor("rgb(231, 154, 10)");
+              handleSaveClick(_, trail.id, type, favoritesURL, user, addToFavorites, favoriteTrails );
             }}>        
               <FontAwesomeIcon icon={faHeart} 
                 size="1x" 
@@ -92,6 +145,18 @@ export default function TrailSpecs(props) {
             </p>
           </> :
           null 
+        }
+        { user && category !== "all" ?
+          <p >        
+            <FontAwesomeIcon icon={faTimes} 
+              size="1x" 
+              className="sidebar-icon specs-icon" 
+              onClick={(_) => {
+                removeThisTrail(_, trail.id, category ); 
+              }}
+            />
+          </p> :
+          null
         }
       </section>
       <section className="specs">

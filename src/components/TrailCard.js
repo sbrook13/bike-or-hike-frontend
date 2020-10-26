@@ -15,11 +15,10 @@ export default function TrailCard(props) {
     removeFromBucketList,
     selectTrail, 
     type, 
-    category, 
+    category
   } = props
 
-  const showSpecsCard = (e) => {
-    e.stopPropagation()
+  const showSpecsCard = () => {
     selectTrail(trail)
   }
 
@@ -36,7 +35,7 @@ export default function TrailCard(props) {
             <FontAwesomeIcon icon={faHeart} 
               size="1x" 
               className="sidebar-icon specs-icon" 
-              onClick={addToFavorites}
+              onClick={addToFavorites(trail.id, type)}
             />
           </>
         )
@@ -46,12 +45,12 @@ export default function TrailCard(props) {
             <FontAwesomeIcon icon={faCheckSquare} 
               size="1x" 
               className="sidebar-icon specs-icon" 
-              onClick={addToCompleted}
+              onClick={addToCompleted(trail.id, type)}
             />
             <FontAwesomeIcon icon={faHeart} 
               size="1x" 
               className="sidebar-icon specs-icon" 
-              onClick={addToFavorites}
+              onClick={addToFavorites(trail.id, type)}
             />
           </>
         )
@@ -60,15 +59,15 @@ export default function TrailCard(props) {
           <FontAwesomeIcon icon={faTimes} 
             size="1x" 
             className="sidebar-icon specs-icon" 
-            onClick={removeFromFavorites}
+            onClick={removeFromFavorites(trail)}
           />
         )
     }
   }
 
     const trailTypeIcon = () => {
-      if (category !== 'all'){
-        if (type === 'bike') { 
+      if (category !== "all"){
+        if (type === "bike") { 
           return (
             <FontAwesomeIcon icon={faBicycle} 
             size="2x" 
@@ -89,11 +88,11 @@ export default function TrailCard(props) {
     }
 
   return (
-    <div className="trail-card" onClick={e => showSpecsCard(e)}>
-      {trailTypeIcon()}
+    <div className="trail-card" onClick={showSpecsCard}>
+      {trailTypeIcon(trail, type)}
       <p>{trail.name}</p>
       <p className="bold">{calculateTime(trail, type)} hrs</p>
-      {statusElement()}
+      {statusElement(trail, type)}
     </div>
   )
 }
