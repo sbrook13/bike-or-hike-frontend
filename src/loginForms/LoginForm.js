@@ -8,7 +8,8 @@ export default function LoginForm(props) {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  function loginUser(){ 
+  function loginUser(e){ 
+    e.preventDefault()
     const user = { username, password }
     getToken(user)  
   }
@@ -35,10 +36,10 @@ export default function LoginForm(props) {
   return (
     <div id="login-section">
       <h2>Login</h2>
-      <form method="POST" id="login-form" >
+      <form method="POST" id="login-form" onSubmit={(_) => loginUser(_)}>
           <input type="text" name="username" placeholder="username"  required="required" onChange={(_) => handleChange(_, setUsername)} />
           <input type="password" name="password" placeholder="password"  required="required" onChange={(_) => handleChange(_, setPassword)}/>
-          <input className="btn" type="button" id="login-button" value="Login" onClick={loginUser} />
+          <input className="btn" type="submit" id="login-button" value="Login" />
       </form>
     </div> 
   )

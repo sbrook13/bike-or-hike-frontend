@@ -34,7 +34,12 @@ export default class AllTrailsPage extends React.Component {
   displayTrailCards = () => {
     if (this.props.dynamicList[0]){
       return this.props.dynamicList.map(trail => {
-        return <TrailCard trail={trail} type={this.props.type} category={this.props.category} selectTrail={this.props.selectTrail} />
+        return <TrailCard 
+          trail={trail} 
+          type={this.props.type} 
+          category={this.props.category}   
+          selectTrail={this.props.selectTrail}
+        />
       })
     } else {
       this.props.setDynamicList(this.props.allTrails)
@@ -46,16 +51,25 @@ export default class AllTrailsPage extends React.Component {
     const trail = this.props.selectedTrail
     return <TrailSpecs 
       trail={trail} 
-      type={this.props.type} 
       user={this.props.user}
-      category={this.props.category}
-      selectTrail={this.props.selectTrail}
       saveToList={this.props.saveToList}
+      dynamicList={this.props.dynamicBikeList}
+      setDynamicList={this.props.setDynamicBikeList}
       addToFavorites={this.props.addToFavorites}
-      removeFromFavorites={this.props.removeFromFavorites}
+      removeFromList={this.props.removeFromList}
       addToCompleted={this.props.addToCompleted}
       addToBucketList={this.props.addToBucketList}
-      removeFromBucketList={this.props.removeFromBucketList}
+      favoriteTrails={this.props.favoriteTrails}
+      completedTrails={this.props.completedTrails}
+      bucketListTrails={this.props.bucketListTrails}
+      setFavoriteTrails={this.props.setFavoriteTrails}
+      setCompletedTrails={this.props.setCompletedTrails}
+      setBucketListTrails={this.props.setBucketListTrails}
+      selectTrail={this.props.selectTrail}
+      selectedTrail={this.props.selectedTrail} 
+      showAllTrails={this.props.showAllTrails}
+      type={this.props.type} 
+      category={this.props.category}
     />
   }
 

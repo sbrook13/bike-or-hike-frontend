@@ -3,7 +3,13 @@ import {parseJSON, usersURL, setToken } from '../components/hooks/customHooks'
 
 export default function NewUserForm(props) {
 
-  const { handleError, handleChange, loginUser, history, getUserData } = props
+  const { 
+    handleError, 
+    handleChange, 
+    loginUser, 
+    history, 
+    showUserData 
+  } = props
 
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
@@ -34,7 +40,7 @@ export default function NewUserForm(props) {
         loginUser(newUser)
         history.push('/')
     })
-    .then(getUserData())
+    .then(showUserData())
     .catch(handleError)
   }
 

@@ -5,7 +5,14 @@ import {parseJSON, authHeaders, homeURL} from '../components/hooks/customHooks'
 
 export default function LoginPage(props) {
 
-  const { loginUser, history, loadCompleted, loadFavorites, loadBucketList } = props
+  const { 
+    loginUser, 
+    history, 
+    setCompletedTrails, 
+    setBucketListTrails, 
+    setFavoriteTrails,
+    setAddress
+  } = props
 
   const [loginType, setFormType] = useState(null)
 
@@ -30,9 +37,10 @@ export default function LoginPage(props) {
             throw new Error('❌ Incorrect Username or Password')
         }
         loginUser(result)
-        loadCompleted(result.completed_trails)
-        loadFavorites(result.favorites)
-        loadBucketList(result.bucket_lists)
+        setCompletedTrails(result.completed_trails)
+        setFavoriteTrails(result.favorites)
+        setBucketListTrails(result.bucket_lists)
+        setAddress(result.address)
         history.push('/') 
       })
       .catch(handleError)
@@ -55,9 +63,7 @@ export default function LoginPage(props) {
       handleChange={handleChange} 
       loginUser={loginUser} 
       history={history} 
-      loadCompleted={loadCompleted} 
-      loadFavorites={loadFavorites} 
-      loadBucketList={loadBucketList} 
+      showUserData={showUserData}
     />
     }
   }

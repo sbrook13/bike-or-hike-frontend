@@ -7,7 +7,13 @@ import CampingPage from './components/CampingPage';
 import SavedTrailsPage from './components/SavedTrailsPage';
 import SideBar from './components/SideBar';
 import LoginPage from './loginForms/LoginPage';
-import {postTrailToBackend, bikeBaseURL, hikeBaseURL} from './components/hooks/customHooks'
+import {
+  postTrailToBackend, 
+  bikeBaseURL, 
+  hikeBaseURL, 
+  bucketlistURL, 
+  authHeaders
+} from './components/hooks/customHooks'
 
 function App() {
 
@@ -21,13 +27,10 @@ function App() {
   const [bucketListTrails, setBucketListTrails] = useState([])
   const [dynamicHikeList, setDynamicHikeList] = useState("")
   const [dynamicBikeList, setDynamicBikeList] = useState("")
+  const [lat, setLat] = useState("39.7392")
+  const [lon, setLon] = useState("-104.9903")
 
-  
-  let lat = user ? "37.2753" : "39.7392"
-  let lon = user ? "-107.8801" : "-104.9903"
-  let maxDistance = "30"
-
-  let queryParams = `lat=${lat}&lon=${lon}&maxDistance=${maxDistance}&sort=distance&maxResults=100`
+  let queryParams = `lat=${lat}&lon=${lon}&maxDistance=30&sort=distance&maxResults=100`
   const apiKey = `key=${process.env.REACT_APP_HIKING_PROJECT_API_KEY}`
 
   useEffect(() => {
@@ -58,6 +61,26 @@ function App() {
     fetchHikeData()
   }, [])
 
+  const geocodeURL = `https://maps.googleapis.com/maps/api/geocode`
+  let convertedAddress = "denver%20colorado"
+  if (address) {
+    convertedAddress = address.split(" ").join("%20")
+  }
+  const geocodeApiKey = `key=${process.env.REACT_APP_GEOCODE_API_KEY}`
+
+  useEffect(() => {
+    const fetchGeocodeData = async () => {
+      try {
+        const response = await fetch(`${geocodeURL}/json?address=${convertedAddress}&${geocodeApiKey}`);
+        const data = await response.json();
+        console.log(data)
+      } catch(err) {
+        // error handling code
+      }
+    }  
+    fetchGeocodeData()
+  }, [])
+
   const loginUser = (loginUser) => {
     setUser(loginUser)
   }
@@ -67,28 +90,9 @@ function App() {
     localStorage.clear()
     window.location.href = '/'
   }
-
-  const storeAddress = (address) => {
-    setAddress(address)
-  }
-
-  const loadCompleted = (completed) => {
-    setCompletedTrails(completed)
-  }
-  const loadFavorites = (favorites) => {
-    setFavoriteTrails(favorites)
-  }
-  const loadBucketList = (bucket_list) => {
-    setBucketListTrails(bucket_list)
-  }
-
-  const showAllTrails = (e) => {
-    e.stopPropagation()
+  
+  const showAllTrails = () => {
     setTrailSelection(null)
-  }
-
-  const selectTrail = (trail) => {
-    setTrailSelection(trail)
   }
 
   const saveToList = (_, trail_id, trail_type, url, user ) => {
@@ -100,29 +104,30 @@ function App() {
     setFavoriteTrails(...favoriteTrails, trail)
   }
 
-  const removeFromFavorites = (trail_id) => {
-    const updatedFavorites = favoriteTrails.filter(favTrail => favTrail.trail_id !== trail_id)
+  const removeFromList = (trail_id, list_id, list, setFunction, url) => {
+    const updatedList = list.filter(savedTrail => savedTrail.trail_id !== trail_id)
+    setFunction(updatedList)
+    fetch(`${url}/${list_id}`, {
+      method: 'DELETE',
+      headers: authHeaders
+    })   
   } 
 
-  const addToCompleted = (trail_id, trail_type) => {
+  const addToCompleted = (trail_id, trail_type, ) => {
     const trail = { trail_id, trail_type }
-    removeFromBucketList(trail_id)
+    const bucketList_trail = bucketListTrails.find(trail => trail.trail_id === trail_id)
+    if (bucketList_trail){
+      removeFromList(bucketList_trail.id, bucketListTrails, setBucketListTrails, bucketlistURL)
+    }
     setCompletedTrails(...completedTrails, trail)
   }
 
   const addToBucketList = (trail_id, trail_type) => {
     const trail = { trail_id, trail_type }
-    if (!bucketListTrails.find(trail => trail.trail_id === trail_id)) {
+    if (!bucketListTrails.find(buckletlistTrail => buckletlistTrail.trail_id === trail_id)) {
       setBucketListTrails(...bucketListTrails, trail)
     }
   }
-
-  const removeFromBucketList = (trail_id) => {
-    if (bucketListTrails.find(trail => trail.trail_id === trail_id) ){
-      const updatedBucketList = bucketListTrails.filter(listTrail => listTrail.trail_id !== trail_id)
-      setBucketListTrails(updatedBucketList)
-    }
-  } 
 
   return (
     <div className="App">
@@ -136,9 +141,10 @@ function App() {
           <Route path="/login" render={ (routeProps) => <LoginPage 
             loginUser={loginUser} 
             {...routeProps} 
-            loadCompleted={loadCompleted} 
-            loadFavorites={loadFavorites} 
-            loadBucketList={loadBucketList} 
+            setCompletedTrails={setCompletedTrails} 
+            setBucketListTrails={setBucketListTrails} 
+            setFavoriteTrails={setFavoriteTrails}
+            setAddress={setAddress}
             /> } 
           />
           <Route path="/rides" render={ () => <AllTrailsPage 
@@ -147,11 +153,16 @@ function App() {
             dynamicList={dynamicBikeList}
             setDynamicList={setDynamicBikeList}
             addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
+            removeFromList={removeFromList}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
-            removeFromBucketList={removeFromBucketList}
-            selectTrail={selectTrail} 
+            favoriteTrails={favoriteTrails}
+            completedTrails={completedTrails}
+            bucketListTrails={bucketListTrails}
+            setFavoriteTrails={setFavoriteTrails}
+            setCompletedTrails={setCompletedTrails}
+            setBucketListTrails={setBucketListTrails}
+            selectTrail={setTrailSelection} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             allTrails={allBikeTrails} 
@@ -164,14 +175,17 @@ function App() {
             saveToList={saveToList}  
             dynamicList={dynamicHikeList}
             setDynamicList={setDynamicHikeList}
-            setDynamicBikeList={setDynamicBikeList}
-            setDynamicHikeList={setDynamicHikeList}
             addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
+            removeFromList={removeFromList}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
-            removeFromBucketList={removeFromBucketList}
-            selectTrail={selectTrail} 
+            favoriteTrails={favoriteTrails}
+            completedTrails={completedTrails}
+            bucketListTrails={bucketListTrails}
+            setFavoriteTrails={setFavoriteTrails}
+            setCompletedTrails={setCompletedTrails}
+            setBucketListTrails={setBucketListTrails}
+            selectTrail={setTrailSelection} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             allTrails={allHikingTrails} 
@@ -181,28 +195,20 @@ function App() {
           />
           <Route path="/camp" render={ () => <CampingPage 
             user={user}
-            saveToList={saveToList}  
-            addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
-            addToCompleted={addToCompleted}
-            addToBucketList={addToBucketList}
-            removeFromBucketList={removeFromBucketList}
-            selectTrail={selectTrail} 
-            selectedTrail={selectedTrail} 
-            showAllTrails={showAllTrails}
             title={"Camping Page Coming Soon!"}
-            savedTrails={completedTrails} 
             /> } 
           />
           <Route path="/completed" render={ () => <SavedTrailsPage 
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
+            removeFromList={removeFromList}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
-            removeFromBucketList={removeFromBucketList}
-            selectTrail={selectTrail} 
+            setFavoriteTrails={setFavoriteTrails}
+            setCompletedTrails={setCompletedTrails}
+            setBucketListTrails={setBucketListTrails}
+            selectTrail={setTrailSelection} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             title={"Your Past Adventures"}
@@ -214,11 +220,13 @@ function App() {
             user={user}
             saveToList={saveToList}  
             addToFavorites={addToFavorites}
-            removeFromFavorites={removeFromFavorites}
+            removeFromList={removeFromList}
             addToCompleted={addToCompleted}
             addToBucketList={addToBucketList}
-            removeFromBucketList={removeFromBucketList}
-            selectTrail={selectTrail} 
+            setFavoriteTrails={setFavoriteTrails}
+            setCompletedTrails={setCompletedTrails}
+            setBucketListTrails={setBucketListTrails}
+            selectTrail={setTrailSelection} 
             selectedTrail={selectedTrail} 
             showAllTrails={showAllTrails}
             title={"Why Not Today?"}
@@ -230,11 +238,13 @@ function App() {
              user={user}
              saveToList={saveToList} 
              addToFavorites={addToFavorites}
-             removeFromFavorites={removeFromFavorites}
+             removeFromList={removeFromList}
              addToCompleted={addToCompleted}
              addToBucketList={addToBucketList}
-             removeFromBucketList={removeFromBucketList}
-             selectTrail={selectTrail} 
+             setFavoriteTrails={setFavoriteTrails}
+             setCompletedTrails={setCompletedTrails}
+             setBucketListTrails={setBucketListTrails}
+             selectTrail={setTrailSelection} 
              selectedTrail={selectedTrail} 
              showAllTrails={showAllTrails}
             title={"The Best of the Best"}
@@ -242,7 +252,7 @@ function App() {
             category={'favorite'}
             /> }
           />
-          <Route path="/" render={ () => <LandingPage user={user} storeAddress={storeAddress} address={address} /> } />
+          <Route path="/" render={ () => <LandingPage user={user} setAddress={setAddress} address={address} /> } />
         </Switch>
       </main>
       <p className="hidden" id="logout-text">Log Out</p>

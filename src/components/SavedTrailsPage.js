@@ -23,7 +23,7 @@ export default class SavedTrailsPage extends React.Component {
     const apiKey = `key=${process.env.REACT_APP_HIKING_PROJECT_API_KEY}`
     const hikeTrailsOnly = this.props.savedTrails.filter(trail => trail.trail_type === 'hike')
     const hikeIdString = this.saveIds(hikeTrailsOnly)
-    const bikeTrailsOnly = this.props.savedTrails.filter(trail => trail.trail_type === 'hike')
+    const bikeTrailsOnly = this.props.savedTrails.filter(trail => trail.trail_type === 'bike')
     const bikeIdString = this.saveIds(bikeTrailsOnly)
     fetch(`${hikesByIdURL}?ids=${hikeIdString}&${apiKey}`)
       .then(parseJSON)
@@ -35,40 +35,59 @@ export default class SavedTrailsPage extends React.Component {
       )
   }
 
+  setTrailType = (array, typeName) => {
+    console.log(array)
+    array.map(trail => {
+      console.log(trail.type)
+      trail.type = typeName
+      console.log(trail.type)
+    })
+  }
+
   displayTrailSections = () => {
     return (
       <>
         <div>
-          <h2>Rides</h2> 
-          {this.displayTrailCards(this.state.fullBikeTrailInfo)} 
+          {this.displayTrailCards(this.state.fullBikeTrailInfo, "bike")} 
         </div>
         <div>
-          <h2>Hikes</h2> 
-          {this.displayTrailCards(this.state.fullHikeTrailInfo)} 
+          {this.displayTrailCards(this.state.fullHikeTrailInfo, "hike")} 
         </div>
       </>
     )
   }
 
-  displayTrailCards = (trailsArray) => {
+  displayTrailCards = (trailsArray, type) => {
     return trailsArray.map(trail => {
-      return <TrailCard trail={trail} selectTrail={this.props.selectTrail} />
+      return <TrailCard 
+        trail={trail} 
+        type={type} 
+        category={this.props.category}   
+        selectTrail={this.props.selectTrail} 
+      />
     })
   }
 
   displayTrailSpecs = () => {
     const trail = this.props.selectedTrail
     return <TrailSpecs 
-      trail={trail}
+      trail={trail} 
+      user={this.props.user}
       saveToList={this.props.saveToList}
       addToFavorites={this.props.addToFavorites}
-      removeFromFavorites={this.props.removeFromFavorites}
+      removeFromList={this.props.removeFromList}
       addToCompleted={this.props.addToCompleted}
       addToBucketList={this.props.addToBucketList}
-      removeFromBucketList={this.props.removeFromBucketList}
+      favoriteTrails={this.props.favoriteTrails}
+      completedTrails={this.props.completedTrails}
+      bucketListTrails={this.props.bucketListTrails}
+      setFavoriteTrails={this.props.setFavoriteTrails}
+      setCompletedTrails={this.props.setCompletedTrails}
+      setBucketListTrails={this.props.setBucketListTrails}
+      selectTrail={this.props.selectTrail}
+      selectedTrail={this.props.selectedTrail} 
       showAllTrails={this.props.showAllTrails}
-      type={trail.trail_type}
-      user={this.props.user}
+      type={this.props.type} 
       category={this.props.category}
     />
   }
