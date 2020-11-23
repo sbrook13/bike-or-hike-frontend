@@ -15,7 +15,7 @@ An app to help you explore more mountain biking and hiking trails near you! Add 
 
 ## Description
 
-Description text 
+Built from a passion of finding new trails to hike and bike, I created Explore More to be able to discover more trails near home, keep track of the ones I have explored, and add new ones to the bucket list. Using the Mountain Bike Project API, the Hiking Project API, Google Maps Geocoding API, users can find trails near home and save them in their secure profile.
 
 ## Demo Video
 
